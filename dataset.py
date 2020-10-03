@@ -279,7 +279,7 @@ def calc_influence(original, train_set, test_set):
         pass
 
 
-def data_select(data_x, data_y, select_num, confident=0.99):
+def data_select(data_x, data_y, select_num, confident=0.7):
     '''
     Select useful and trustable instances for SSL.
 
@@ -294,7 +294,7 @@ def data_select(data_x, data_y, select_num, confident=0.99):
 
     for i in range(data_y.shape[0]):
         for y in data_y[i]:
-            if (1 - confident) < y < confident:
+            if ((1 - confident) < y < confident) or (y < (confident - 1)) or (y > (2 - confident)):
                 out_data.append(i)
                 break
         else:  # this else is for break for

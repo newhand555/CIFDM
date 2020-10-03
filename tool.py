@@ -33,7 +33,6 @@ class CorrelationMSELoss(torch.nn.Module):
     def forward(self, pred, label):
         return self.mse(pred, label) + self.correlation(pred, label)
 
-
 class CorrelationMLSMLoss(torch.nn.Module):
     def __init__(self):
         super(CorrelationMLSMLoss, self).__init__()
@@ -81,6 +80,10 @@ class CorrelationLoss(torch.nn.Module):
 
         return loss_total
 
+def regularization_2(model):
+    loss = 0
+    for param in model.parameters():
+        pass
 
 def label_correlation_loss(pred, label):
     '''
@@ -154,7 +157,8 @@ def test_train(old_model, new_model, assist_model, dataset, task_id, device):
         # print("+++", y.cpu().detach().numpy())
         # print("---", pred.cpu().detach().numpy().round())
         # print()
-        pred_all = np.concatenate([pred_all, pred.cpu().detach().numpy().round()], 0)
+        pred = pred.cpu().detach().numpy() > 0.5
+        pred_all = np.concatenate([pred_all, pred], 0)
 
     # for i in range(pred_all.shape[0]):
     #     print("+++", dataset.data_y[i])
@@ -163,6 +167,7 @@ def test_train(old_model, new_model, assist_model, dataset, task_id, device):
     # print("+++", dataset.data_y[-1])
     # print("---", pred_all[-1])
     # print()
+    print(pred_all)
     print("Task {} Acc: {}".format(task_id, accuracy_score(dataset.data_y, pred_all)))
     # print()
     # print(pred_all.shape, dataset.data_y.shape)

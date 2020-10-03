@@ -99,14 +99,14 @@ def train_joint(model_old, model_new, model_assist, train_set, test_set, device,
             for t in selected:
                 selected_x.append(train_set.data_x[t])
                 selected_y.append(data_y[t].round())
-                selected_truth.append(train_set.all_y[t][: 7]) # test selected performance
+                # selected_truth.append(train_set.all_y[t][: 7]) # test selected performance
 
             dataset_old = StreamDataset(np.array(selected_x), np.array(selected_y), train_set.task_id, None)
 
-            selected_y = np.array(selected_y) # test selected performance
-            selected_truth = np.array(selected_truth) # test selected performance
+            # selected_y = np.array(selected_y) > 0.5 # test selected performance
+            # selected_truth = np.array(selected_truth) # test selected performance
             # print(selected_y.shape, selected_truth.shape) # test selected performance
-            print("The selected accuracy is", accuracy_score(selected_truth, selected_y)) # test selected performance
+            # print("The selected accuracy is", accuracy_score(selected_truth, selected_y), accuracy_score(selected_truth.reshape(-1), selected_y.reshape(-1))) # test selected performance
 
 
 

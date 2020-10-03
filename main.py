@@ -3,7 +3,7 @@ import copy
 from time import time
 import numpy as np
 import torch
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, roc_auc_score
 
 from configuration import Config
 from dataset import load_dataset
@@ -18,8 +18,8 @@ def main(opt):
     config = Config(opt)
     device = torch.device('cuda')
     # train_list, test_train_list, test_data = load_dataset('yeast', 103, [14], [1500], [900], True)
-    # train_list, test_train_list, test_data = load_dataset('yeast', 103, [6, 5, 3], [500, 500, 500], [300, 300, 300], True)
-    train_list, test_train_list, test_data = load_dataset('yeast', 103, [7, 6], [900, 500], [500, 500], True)
+    train_list, test_train_list, test_data = load_dataset('yeast', 103, [6, 5, 3], [500, 500, 500], [300, 300, 300], True)
+    # train_list, test_train_list, test_data = load_dataset('yeast', 103, [7, 6], [900, 500], [500, 500], True)
     task_num = len(train_list)
     test_train_flag = False
 
@@ -42,11 +42,11 @@ def main(opt):
         if i == 0:
             # Task 0, only train old model as base.
             temp_criterion = CorrelationMLSMLoss()
-            train_single(old_concate_model, train_list[i], test_train_list[i], device, temp_criterion, 5)
+            train_single(old_concate_model, train_list[i], test_train_list[i], device, temp_criterion, 30)
             if test_train_flag: test_train(old_concate_model, None, None, test_train_list[i], i, device)
         else:
             # Other tasks need to adjust old model and train new model.
-            train_joint(old_concate_model, new_concate_model, assist_model, train_list[i], None, device, 12)
+            train_joint(old_concate_model, new_concate_model, assist_model, train_list[i], None, device, 30)
             if test_train_flag: test_train(old_concate_model, new_concate_model, assist_model, test_train_list[i], i, device)
             print("Phase {} passed.".format(i))
 
@@ -58,8 +58,8 @@ def main(opt):
             teacher_end_model = TeacherEndModel(copy.deepcopy(old_end_model), copy.deepcopy(new_end_model),
                                                 assist_model)
             teacher_concate_model = ConcatTeacherModel(teacher_front_model, teacher_end_model)
-            student_train_teacher(teacher_concate_model, train_list[i], device, 12)
-            teacher_train_student(teacher_concate_model, old_concate_model, new_concate_model, train_list[i], device, 12)
+            student_train_teacher(teacher_concate_model, train_list[i], device, 20)
+            teacher_train_student(teacher_concate_model, old_concate_model, new_concate_model, train_list[i], device, 30)
 
     onlynew = True
     test_data.load_task(task_num-1)
@@ -94,9 +94,11 @@ def main(opt):
         print("+++", y.cpu().detach().numpy())
         print("---", pred.cpu().detach().numpy().round())
         print()
-        outputs = np.concatenate([outputs, pred.cpu().detach().numpy().round()], 0)
-        real_labels = np.concatenate([real_labels, y.cpu().detach().numpy().round()], 0)
-    outputs = np.array(outputs)
+        outputs = np.concatenate([outputs, pred.cpu().detach().numpy()], 0)
+        real_labels = np.concatenate([real_labels, y.cpu().detach().numpy()], 0)
+
+    print("Test AUC: {}".format(roc_auc_score(real_labels, outputs, average='micro')))
+    outputs = np.array(outputs) > 0.5
     real_labels = np.array(real_labels)
     print(outputs.shape, real_labels.shape)
     print("Test Acc: {}".format(accuracy_score(real_labels, outputs)))
