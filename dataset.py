@@ -278,6 +278,11 @@ def calc_influence(original, train_set, test_set):
     for i in range(len(train_set)):
         pass
 
+def data_select_mask(data_y, confident=0.9):
+    round0 = np.logical_and((confident-1) < data_y, data_y < (1-confident))
+    round1 = np.logical_and(confident < data_y, data_y < (2-confident))
+    psedu = np.logical_or(round0, round1).astype(int)
+    return psedu
 
 def data_select(data_x, data_y, select_num, confident=0.7):
     '''
@@ -298,7 +303,7 @@ def data_select(data_x, data_y, select_num, confident=0.7):
                 out_data.append(i)
                 break
         else:  # this else is for break for
-            print(data_y[i].round(4))
+            # print(data_y[i].round(4))
             in_data.append(i)
 
     if (select_num == -1) or (len(in_data) == 0): # Currently it will return here, ignore the rest part.

@@ -9,7 +9,7 @@ from configuration import Config
 from dataset import load_dataset
 from model import OldFrontModel, OldEndModel, NewFrontModel, NewEndModel, IntermediaModel, AssistModel, ConcatOldModel, \
     ConcatNewModel, TeacherFrontModel, TeacherEndModel, ConcatTeacherModel
-from tool import CorrelationMLSMLoss, test_train
+from tool import CorrelationMLSMLoss, test_train, init_weights
 from train import train_single, train_joint, student_train_teacher, teacher_train_student
 from torch.utils.data import DataLoader
 
@@ -18,8 +18,8 @@ def main(opt):
     config = Config(opt)
     device = torch.device('cuda')
     # train_list, test_train_list, test_data = load_dataset('yeast', 103, [14], [1500], [900], True)
-    train_list, test_train_list, test_data = load_dataset('yeast', 103, [6, 5, 3], [500, 500, 500], [300, 300, 300], True)
-    # train_list, test_train_list, test_data = load_dataset('yeast', 103, [7, 6], [900, 500], [500, 500], True)
+    # train_list, test_train_list, test_data = load_dataset('yeast', 103, [6, 5, 3], [500, 500, 500], [300, 300, 300], True)
+    train_list, test_train_list, test_data = load_dataset('yeast', 103, [7, 6], [900, 600], [500, 400], True)
     task_num = len(train_list)
     test_train_flag = False
 
@@ -31,6 +31,13 @@ def main(opt):
     assist_model = AssistModel(train_list[0].get_label_num(), train_list[1].get_label_num())
     old_concate_model = ConcatOldModel(old_front_model, old_end_model)
     new_concate_model = ConcatNewModel(new_front_model, new_end_model)
+
+    old_front_model.apply(init_weights)
+    old_end_model.apply(init_weights)
+    new_front_model.apply(init_weights)
+    new_end_model.apply(init_weights)
+    intermedia_model.apply(init_weights)
+    assist_model.apply(init_weights)
 
     print(len(train_list))
     for data in train_list:
@@ -101,7 +108,7 @@ def main(opt):
     outputs = np.array(outputs) > 0.5
     real_labels = np.array(real_labels)
     print(outputs.shape, real_labels.shape)
-    print("Test Acc: {}".format(accuracy_score(real_labels, outputs)))
+    print("Test Acc: {}, {}".format(accuracy_score(real_labels, outputs), accuracy_score(real_labels.reshape(-1), outputs.reshape(-1))))
 
 
 if __name__ == '__main__':

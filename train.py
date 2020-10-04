@@ -5,7 +5,7 @@ from sklearn.metrics import accuracy_score
 from dataset import data_select, StreamDataset, ParallelDataset
 import numpy as np
 from model import ConcatOldModel
-from tool import CorrelationMLSMLoss, test_train
+from tool import CorrelationMLSMLoss, test_train, produce_pseudo_data
 
 
 def train_single(model, train_set, test_set, device, criterion, epoch=1):
@@ -79,6 +79,7 @@ def train_joint(model_old, model_new, model_assist, train_set, test_set, device,
 
     # todo there are two ways: 1. train one by one. 2. train mixed.
     for e in range(epoch):
+        '''
         data_y = []
 
         # Get the predictions of the old model to be the psudo labels.
@@ -108,11 +109,24 @@ def train_joint(model_old, model_new, model_assist, train_set, test_set, device,
             # print(selected_y.shape, selected_truth.shape) # test selected performance
             # print("The selected accuracy is", accuracy_score(selected_truth, selected_y), accuracy_score(selected_truth.reshape(-1), selected_y.reshape(-1))) # test selected performance
 
-
-
-
             temp_criterion = CorrelationMLSMLoss()
-            train_single(model_old, dataset_old, None, device, temp_criterion, 1)  # epoch is 1 to train once.
+            # train_single(model_old, dataset_old, None, device, temp_criterion, 1)  # epoch is 1 to train once.
+        '''
+        dataset_old = produce_pseudo_data(train_set, model_old, device)
+        loader_old = DataLoader(dataset_old, batch_size=1, shuffle=False)
+        model_old.train()
+        optimizer_old = torch.optim.Adam(model_old.parameters(), weight_decay=1e-08)
+        criterion = CorrelationMLSMLoss().to(device)
+
+        for x, m, y in loader_old:
+            x = x.to(device)
+            m = m.to(device)
+            y = torch.mul(y.to(device), m)
+            optimizer_old.zero_grad()
+            output = torch.mul(model_old(x), m)
+            loss = criterion(output, y)
+            loss.backward()
+            optimizer_old.step()
 
         model_old.eval()
         data_x = []

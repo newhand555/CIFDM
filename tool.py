@@ -4,19 +4,25 @@ from sklearn.metrics import accuracy_score
 from torch.utils.data import DataLoader
 import numpy as np
 from backup.dataset_backup_001 import load_dataset_old
-from dataset import StreamDataset
+from dataset import StreamDataset, data_select, data_select_mask, ParallelDataset
 import torch
 
 
 def accuracy(pred, label):
     pass
 
+def init_weights(w, m='kaiming'):
+    if m == 'kaiming':
+        if type(w) == torch.nn.Linear:
+            torch.nn.init.kaiming_normal_(w.weight)
+    else:
+        return
+
 
 def correlation_plus_mse(pred, label, device):
     mse = torch.nn.MSELoss().to(device)
     loss = mse(pred, label) + label_correlation_loss(pred, label)
     return loss
-
 
 def correlation_plus_MLSMLoss(pred, label, device):
     MLSM = torch.nn.MultiLabelSoftMarginLoss().to(device)
@@ -167,13 +173,59 @@ def test_train(old_model, new_model, assist_model, dataset, task_id, device):
     # print("+++", dataset.data_y[-1])
     # print("---", pred_all[-1])
     # print()
-    print(pred_all)
+    # print(pred_all)
     print("Task {} Acc: {}".format(task_id, accuracy_score(dataset.data_y, pred_all)))
     # print()
     # print(pred_all.shape, dataset.data_y.shape)
 
+def produce_pseudo_data(data, model, device, method='mask'):
+    model.eval()
+    dataset = None
+    data_y = []
 
+    # Get the predictions of the old model to be the psudo labels.
+    for x in data.data_x:
+        x = torch.Tensor(x).to(device)
+        data_y.append(model(x).cpu().detach().numpy())
 
+    data_y = np.array(data_y)
+    if method == 'mask':
+        mask = data_select_mask(data_y)
+        dataset = ParallelDataset(data.data_x, mask, data_y.round(), data.task_id, None)
+
+        preds = []
+        reals = []
+        for i in range(mask.shape[0]):
+            for j in range(mask.shape[1]):
+                if mask[i][j] == 1:
+                    preds.append(data_y[i][j].round())
+                    temp = data.all_y[i][: 7]
+                    reals.append(temp[j])
+        print(mask.shape[1]*mask.shape[0], np.sum(mask), accuracy_score(np.array(reals), np.array(preds)))
+
+    else:
+        selected = data_select(data.data_x, data_y, -1)  # use inter or final to find suitable samples
+        mask = np.ones((data.data_x.shape[0], model.get_out_dim()))
+
+        # Fine tune the old model by psudo labels.
+        if len(selected) != 0:
+            # todo how about no data.
+            selected_x = []
+            selected_y = []
+            selected_truth = []  # test selected performance
+
+            for t in selected:
+                selected_x.append(data.data_x[t])
+                selected_y.append(data_y[t].round())
+                # selected_truth.append(train_set.all_y[t][: 7]) # test selected performance
+
+            dataset = ParallelDataset(np.array(selected_x), mask, np.array(selected_y), data.task_id, None)
+
+        # selected_y = np.array(selected_y) > 0.5 # test selected performance
+        # selected_truth = np.array(selected_truth) # test selected performance
+        # print(selected_y.shape, selected_truth.shape) # test selected performance
+        # print("The selected accuracy is", accuracy_score(selected_truth, selected_y), accuracy_score(selected_truth.reshape(-1), selected_y.reshape(-1))) # test selected performance
+    return dataset
 
 def main():
     loss = label_correlation_loss(

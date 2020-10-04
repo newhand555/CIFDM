@@ -6,7 +6,7 @@ class OldFrontModel(nn.Module):
     def __init__(self):
         super(OldFrontModel, self).__init__()
         self.layers = nn.Sequential(
-            nn.Linear(103, 200, True),
+            nn.Linear(103, 64, True),
             nn.Dropout(0.1, inplace=False),
             nn.ReLU(),
         )
@@ -21,12 +21,12 @@ class OldEndModel(nn.Module):
         super(OldEndModel, self).__init__()
         self.out_dim = output
         self.layers = nn.Sequential(
-            nn.Linear(200, 20, True),
+            nn.Linear(64, 32, True),
             nn.Dropout(0.1, inplace=False),
             nn.ReLU(),
         )
         self.out_layer = nn.Sequential(
-            nn.Linear(20, output, bias=True),
+            nn.Linear(32, output, bias=True),
             nn.Sigmoid()
 
         )
@@ -34,7 +34,7 @@ class OldEndModel(nn.Module):
     def modify_out_layer(self, output):
         self.out_dim = output
         self.out_layer = nn.Sequential(
-            nn.Linear(20, output, bias=True),
+            nn.Linear(32, output, bias=True),
             nn.Sigmoid()
         )
 
@@ -51,7 +51,7 @@ class NewFrontModel(nn.Module):
     def __init__(self):
         super(NewFrontModel, self).__init__()
         self.layers = nn.Sequential(
-            nn.Linear(103, 200, True),
+            nn.Linear(103, 64, True),
             nn.Dropout(0.1, inplace=False),
             nn.ReLU()
         )
@@ -66,19 +66,19 @@ class NewEndModel(nn.Module):
         super(NewEndModel, self).__init__()
         self.out_dim = output
         self.layers = nn.Sequential(
-            nn.Linear(200, 20, bias=True),
+            nn.Linear(64, 32, bias=True),
             nn.Dropout(0.1, inplace=False),
             nn.ReLU(),
         )
         self.out_layer = nn.Sequential(
-            nn.Linear(20 + output, output, bias=True),
+            nn.Linear(32 + output, output, bias=True),
             nn.Sigmoid()
         )
 
     def modify_out_layer(self, output):
         self.out_dim = output
         self.out_layer = nn.Sequential(
-            nn.Linear(20 + output, output, bias=True),
+            nn.Linear(32 + output, output, bias=True),
             nn.Sigmoid()
         )
 
@@ -96,7 +96,7 @@ class IntermediaModel(nn.Module):
     def __init__(self):
         super(IntermediaModel, self).__init__()
         self.layers = nn.Sequential(
-            nn.Linear(400, 200, bias=True),
+            nn.Linear(128, 64, bias=True),
             nn.ReLU()
         )
 
@@ -175,6 +175,8 @@ class ConcatOldModel(nn.Module):
         x = self.end(x)
         return x
 
+    def get_out_dim(self):
+        return self.end.get_out_dim()
 
 class ConcatNewModel(nn.Module):
     def __init__(self, front, end):
@@ -186,6 +188,9 @@ class ConcatNewModel(nn.Module):
         x1 = self.front(x1)
         y = self.end(x1, x2)
         return y
+
+    def get_out_dim(self):
+        return self.end.get_out_dim()
 
 
 class ConcatTeacherModel(nn.Module):
