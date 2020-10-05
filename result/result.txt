@@ -1,0 +1,54 @@
+yigong@lambda-quad-4:~/PycharmProjects/CIFDM$ python3 main.py
+======================== Task 0 ========================
+Task 0 train Acc: 0.638
+Test AUC: 0.8116482701577251
+Test Acc: 0.4787350054525627, 0.7519083969465649
+
+======================== Task 1 ========================
+2000 1480 0.8162162162162162
+2000 1611 0.8131595282433272
+2000 1788 0.8076062639821029
+2000 1854 0.8025889967637541
+Joint train passed.
+The task 0 result is following:
+Test AUC: 0.7295390388960321
+Test Acc: 0.46346782988004365, 0.7484551072337332
+The task 1 result is following:
+Test AUC: 0.7295390388960321
+Test Acc: 0.46346782988004365, 0.7484551072337332
+Student train teacher passed.
+Teacher train student passed.
+
+======================== Task 2 ========================
+3500 3046 0.8059750492449114
+3500 3210 0.8
+3500 3249 0.7971683594952294
+3500 3263 0.7965062825620595
+Joint train passed.
+The task 0 result is following:
+Test AUC: 0.7322494111092945
+Test Acc: 0.47001090512540894, 0.7215557978916758
+The task 1 result is following:
+Test AUC: 0.7322494111092945
+Test Acc: 0.47001090512540894, 0.7215557978916758
+The task 2 result is following:
+Test AUC: 0.7322494111092945
+Test Acc: 0.47001090512540894, 0.7215557978916758
+
+======================== Final Result ========================
+The task 0 result is following:
+Test AUC: 0.8144175789863981
+Test Acc: 0.5354416575790621, 0.7968920392584514
+
+The task 1 result is following:
+Test AUC: 0.7561821726960544
+Test Acc: 0.45910577971646677, 0.752453653217012
+
+The task 2 result is following:
+Test AUC: 0.7322494111092945
+Test Acc: 0.47001090512540894, 0.7215557978916758
+
+The overall result is following:
+Test AUC: 0.7883331600672427
+Test Acc: 0.15703380588876772, 0.760959651035987
+421.1619818210602 s.

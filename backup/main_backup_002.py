@@ -72,31 +72,6 @@ class TestDataset(Dataset):
     '''
     A dataset format for test.
     '''
-    def __init__(self, data_x, data_y, transform=None):
-        self.data_x = data_x
-        self.data_y = data_y
-        self.label_num = self.data_y.shape[1]
-        self.transform = transform
-
-    def get_label_num(self):
-        return self.label_num
-
-    def __len__(self):
-        return len(self.data_x)
-
-    def __getitem__(self, idx):
-        x = self.data_x[idx]
-        y = self.data_y[idx]
-
-        if self.transform:
-            x, y = self.transform(x, y)
-
-        return x, y
-
-class TestDatasetOld(Dataset):
-    '''
-    A dataset format for test.
-    '''
     def __init__(self, data_x, data_y_dict, transform=None):
         self.data_x = data_x
         self.data_y_dict = data_y_dict
@@ -127,6 +102,7 @@ class TestDatasetOld(Dataset):
             x, y = self.transform(x, y)
 
         return x, y
+
 
 def make_data_dict(data, attri_num, label_list, from_head):
     '''
@@ -191,14 +167,15 @@ def make_test_dataset(data, attri_num, label_list):
     :param instance_list: An array how many instances are assigned to each task.
     :return: A dictionary that key is task id and returns specific labels for that task.
     '''
+    data_dict = make_data_dict(data, attri_num, label_list, False)
     data_x = data[:, : attri_num]
-    data_y = data[:, attri_num:] # -1 means it contains all labels.
-    data_test = TestDataset(data_x, data_y, None)
+    data_dict[-1] = data[:, attri_num:] # -1 means it contains all labels.
+    data_test = TestDataset(data_x, data_dict, None)
 
     return data_test
 
 
-def load_dataset(shuffle, config):
+def load_dataset(data_name, shuffle, config):
     '''
     Load dataset from file.
     :param data_name: The name of dataset.
@@ -208,7 +185,7 @@ def load_dataset(shuffle, config):
     :param test_instance_list: An array how many instances are assigned to each task.
     :return: A tuple of lists. Each list contains a dataset for a task.
     '''
-    if config.data_name == "yeast":
+    if data_name == "yeast":
         train_path = 'data/yeast-train.arff'
         test_path = 'data/yeast-test.arff'
         train_data = arff.load(open(train_path, 'rt'))
@@ -216,7 +193,7 @@ def load_dataset(shuffle, config):
         test_data = arff.load(open(test_path, 'rt'))
         test_data = np.array(test_data['data']).astype(np.float32)
     else:
-        print("The dataset {} is not supported.".format(config.data_name))
+        print("The dataset {} is not supported.".format(data_name))
         return None
 
     total = config.attri_num
@@ -301,7 +278,7 @@ def calc_influence(original, train_set, test_set):
     for i in range(len(train_set)):
         pass
 
-def data_select_mask(data_y, confident=0.999):
+def data_select_mask(data_y, confident=0.9):
     round0 = np.logical_and((confident-1) < data_y, data_y < (1-confident))
     round1 = np.logical_and(confident < data_y, data_y < (2-confident))
     psedu = np.logical_or(round0, round1).astype(int)

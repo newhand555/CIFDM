@@ -20,11 +20,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a4b18051-d0b8-4948-b892-c1c9d62487fc" name="Default Changelist" comment="Update.">
+      <change afterPath="$PROJECT_DIR$/backup/dataset_backup_002.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backup/main_backup_002.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backup/model_backup_002.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backup/tool_backup_001.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backup/tool_backup_002.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backup/train_backup_002.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/result/result.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/configuration.py" beforeDir="false" afterPath="$PROJECT_DIR$/configuration.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataset.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tian.py" beforeDir="false" afterPath="$PROJECT_DIR$/tian.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tool.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/train.py" afterDir="false" />
     </list>
@@ -32,6 +39,13 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -136,7 +150,8 @@
       <workItem from="1601690668857" duration="8420000" />
       <workItem from="1601702106437" duration="143000" />
       <workItem from="1601702252459" duration="3000" />
-      <workItem from="1601754450438" duration="14831000" />
+      <workItem from="1601754450438" duration="15559000" />
+      <workItem from="1601840983842" duration="20812000" />
     </task>
     <task id="LOCAL-00001" summary="Update.">
       <created>1601702222335</created>
@@ -145,7 +160,14 @@
       <option name="project" value="LOCAL" />
       <updated>1601702222335</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Update.">
+      <created>1601787632484</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1601787632485</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -180,29 +202,34 @@
       <screen x="1920" y="0" width="1920" height="1200" />
     </state>
     <state x="2696" y="300" width="429" height="633" key="Github.UntrackedFilesDialog/1920.0.1920.1200/0.27.1920.1173@1920.0.1920.1200" timestamp="1601690953349" />
-    <state width="1802" height="242" key="GridCell.Tab.0.bottom" timestamp="1601778622767">
+    <state width="1802" height="471" key="GridCell.Tab.0.bottom" timestamp="1601874365548">
       <screen x="1920" y="0" width="1920" height="1200" />
     </state>
-    <state width="1802" height="242" key="GridCell.Tab.0.bottom/1920.0.1920.1200/0.27.1920.1173@1920.0.1920.1200" timestamp="1601778622767" />
-    <state width="1802" height="242" key="GridCell.Tab.0.center" timestamp="1601778622767">
+    <state width="1802" height="471" key="GridCell.Tab.0.bottom/1920.0.1920.1200/0.27.1920.1173@1920.0.1920.1200" timestamp="1601874365548" />
+    <state width="1802" height="172" key="GridCell.Tab.0.bottom/1920.0.1920.1200/72.27.1848.1173@72.27.1848.1173" timestamp="1601788349101" />
+    <state width="1802" height="471" key="GridCell.Tab.0.center" timestamp="1601874365548">
       <screen x="1920" y="0" width="1920" height="1200" />
     </state>
-    <state width="1802" height="242" key="GridCell.Tab.0.center/1920.0.1920.1200/0.27.1920.1173@1920.0.1920.1200" timestamp="1601778622767" />
-    <state width="1802" height="242" key="GridCell.Tab.0.left" timestamp="1601778622767">
+    <state width="1802" height="471" key="GridCell.Tab.0.center/1920.0.1920.1200/0.27.1920.1173@1920.0.1920.1200" timestamp="1601874365548" />
+    <state width="1802" height="172" key="GridCell.Tab.0.center/1920.0.1920.1200/72.27.1848.1173@72.27.1848.1173" timestamp="1601788349101" />
+    <state width="1802" height="471" key="GridCell.Tab.0.left" timestamp="1601874365548">
       <screen x="1920" y="0" width="1920" height="1200" />
     </state>
-    <state width="1802" height="242" key="GridCell.Tab.0.left/1920.0.1920.1200/0.27.1920.1173@1920.0.1920.1200" timestamp="1601778622767" />
-    <state width="1802" height="242" key="GridCell.Tab.0.right" timestamp="1601778622767">
+    <state width="1802" height="471" key="GridCell.Tab.0.left/1920.0.1920.1200/0.27.1920.1173@1920.0.1920.1200" timestamp="1601874365548" />
+    <state width="1802" height="172" key="GridCell.Tab.0.left/1920.0.1920.1200/72.27.1848.1173@72.27.1848.1173" timestamp="1601788349101" />
+    <state width="1802" height="471" key="GridCell.Tab.0.right" timestamp="1601874365548">
       <screen x="1920" y="0" width="1920" height="1200" />
     </state>
-    <state width="1802" height="242" key="GridCell.Tab.0.right/1920.0.1920.1200/0.27.1920.1173@1920.0.1920.1200" timestamp="1601778622767" />
-    <state x="2511" y="349" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1601702246985">
-      <screen x="1920" y="0" width="1920" height="1200" />
+    <state width="1802" height="471" key="GridCell.Tab.0.right/1920.0.1920.1200/0.27.1920.1173@1920.0.1920.1200" timestamp="1601874365548" />
+    <state width="1802" height="172" key="GridCell.Tab.0.right/1920.0.1920.1200/72.27.1848.1173@72.27.1848.1173" timestamp="1601788349101" />
+    <state x="641" y="368" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1601787641873">
+      <screen x="72" y="27" width="1848" height="1173" />
     </state>
     <state x="2511" y="349" width="800" height="535" key="Vcs.Push.Dialog.v2/1920.0.1920.1200/0.27.1920.1173@1920.0.1920.1200" timestamp="1601702246985" />
+    <state x="641" y="368" width="800" height="535" key="Vcs.Push.Dialog.v2/1920.0.1920.1200/72.27.1848.1173@72.27.1848.1173" timestamp="1601787641873" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/CIFDM$main.coverage" NAME="main Coverage Results" MODIFIED="1601778622753" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CIFDM$main.coverage" NAME="main Coverage Results" MODIFIED="1601873893128" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CIFDM$train.coverage" NAME="train Coverage Results" MODIFIED="1601775555397" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CIFDM$tian.coverage" NAME="tian Coverage Results" MODIFIED="1601775542384" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>

@@ -3,6 +3,7 @@ from time import time
 from sklearn.metrics import accuracy_score, roc_auc_score
 from torch.utils.data import DataLoader
 import numpy as np
+from backup.dataset_backup_001 import load_dataset_old
 from dataset import StreamDataset, data_select, data_select_mask, ParallelDataset
 import torch
 
@@ -173,7 +174,7 @@ def test_train(old_model, new_model, assist_model, dataset, task_id, device):
     # print("---", pred_all[-1])
     # print()
     # print(pred_all)
-    print("Task {} train Acc: {}".format(task_id, accuracy_score(dataset.data_y, pred_all)))
+    print("Task {} Acc: {}".format(task_id, accuracy_score(dataset.data_y, pred_all)))
     # print()
     # print(pred_all.shape, dataset.data_y.shape)
 
@@ -190,7 +191,7 @@ def produce_pseudo_data(data, model, device, method='mask'):
     data_y = np.array(data_y)
     if method == 'mask':
         mask = data_select_mask(data_y)
-        dataset = ParallelDataset(data.data_x, mask, data_y.round(), data.task_id, None) if np.sum(mask) != 0 else None
+        dataset = ParallelDataset(data.data_x, mask, data_y.round(), data.task_id, None)
 
         preds = []
         reals = []
@@ -226,52 +227,6 @@ def produce_pseudo_data(data, model, device, method='mask'):
         # print("The selected accuracy is", accuracy_score(selected_truth, selected_y), accuracy_score(selected_truth.reshape(-1), selected_y.reshape(-1))) # test selected performance
     return dataset
 
-def make_test(old_concate_model, new_concate_model, assist_model, test_data, device, method, config):
-    label_index = [0]
-    for l in config.label_list:
-        label_index.append(l+label_index[-1])
-
-    if isinstance(method, int):
-        if method == -1:
-            s_idx = label_index[0]
-            e_idx = label_index[-1]
-        else:
-            s_idx = label_index[method]
-            e_idx = label_index[method+1]
-    else:
-        s_idx = label_index[0]
-        e_idx = label_index[-1]
-        print("Error test method.")
-        exit()
-
-    test_loader = DataLoader(test_data, batch_size=1, shuffle=False)
-    old_concate_model.to(device).eval()
-    new_concate_model.to(device).eval()
-    assist_model.to(device).eval()
-
-    outputs = np.empty((0, old_concate_model.get_out_dim()+new_concate_model.get_out_dim()))
-
-    for x, y in test_loader:
-        x = x.to(device)
-        y = y.to(device)
-        pred1 = old_concate_model(x)
-        x2 = assist_model(pred1)
-        pred2 = new_concate_model(x, x2)
-        pred = torch.cat([pred1, pred2], 1)
-        outputs = np.concatenate([outputs, pred.cpu().detach().numpy()], 0)
-
-        # print("+++", y.cpu().detach().numpy()[:, s_idx: e_idx])
-        # print("---", pred.cpu().detach().numpy().round()[:, s_idx: e_idx])
-        # print()
-
-    real_label = np.array(test_data.data_y)[:, s_idx: e_idx]
-    pred_label = outputs[:, s_idx: e_idx]
-    print("Test AUC: {}".format(roc_auc_score(real_label, pred_label, average='micro')))
-
-    pred_label = np.array(pred_label) > 0.5
-    print("Test Acc: {}, {}".format(accuracy_score(real_label, pred_label),
-                                    accuracy_score(real_label.reshape(-1), pred_label.reshape(-1))))
-
 def main():
     loss = label_correlation_loss(
         torch.Tensor([[0, 1, 0], [1, 0, 1]]),
@@ -279,6 +234,11 @@ def main():
     )
     print(loss)
     return
+    train_X, train_Y, train_Y_rest, test_X, test_Y, test_Y_rest = load_dataset_old('yeast', 103, 0.5)
+    train_X = StreamDataset(train_X, train_Y, 0)
+    print(train_X.data_x.shape)
+    for x, y in train_X:
+        print(x.shape, y.shape)
 
 
 if __name__ == '__main__':

@@ -7,7 +7,7 @@ class OldFrontModel(nn.Module):
         super(OldFrontModel, self).__init__()
         self.layers = nn.Sequential(
             nn.Linear(103, 64, True),
-            nn.Dropout(0.2, inplace=False),
+            nn.Dropout(0.1, inplace=False),
             nn.ReLU(),
         )
 
@@ -22,7 +22,7 @@ class OldEndModel(nn.Module):
         self.out_dim = output
         self.layers = nn.Sequential(
             nn.Linear(64, 32, True),
-            nn.Dropout(0.2, inplace=False),
+            nn.Dropout(0.1, inplace=False),
             nn.ReLU(),
         )
         self.out_layer = nn.Sequential(
@@ -52,7 +52,7 @@ class NewFrontModel(nn.Module):
         super(NewFrontModel, self).__init__()
         self.layers = nn.Sequential(
             nn.Linear(103, 64, True),
-            nn.Dropout(0.2, inplace=False),
+            nn.Dropout(0.1, inplace=False),
             nn.ReLU()
         )
 
@@ -67,7 +67,7 @@ class NewEndModel(nn.Module):
         self.out_dim = output
         self.layers = nn.Sequential(
             nn.Linear(64, 32, bias=True),
-            nn.Dropout(0.2, inplace=False),
+            nn.Dropout(0.1, inplace=False),
             nn.ReLU(),
         )
         self.out_layer = nn.Sequential(
