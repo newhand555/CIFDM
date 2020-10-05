@@ -307,7 +307,7 @@ def data_select_mask(data_y, confident=0.999):
     psedu = np.logical_or(round0, round1).astype(int)
     return psedu
 
-def data_select(data_x, data_y, select_num, confident=0.7):
+def data_select(data_x, data_y, select_num, confident=0.999):
     '''
     Select useful and trustable instances for SSL.
 

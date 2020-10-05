@@ -52,3 +52,88 @@ The overall result is following:
 Test AUC: 0.7883331600672427
 Test Acc: 0.15703380588876772, 0.760959651035987
 421.1619818210602 s.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/usr/bin/python3.8 /home/yigong/PycharmProjects/CIFDM/main.py
+======================== Task 0 ========================
+Task 0 train Acc: 0.678
+Test AUC: 0.8192044241690046
+Test Acc: 0.4830970556161396, 0.759814612868048
+
+======================== Task 1 ========================
+There are 464 instances that can be trusted.
+There are 483 instances that can be trusted.
+There are 486 instances that can be trusted.
+There are 486 instances that can be trusted.
+Joint train passed.
+The task 0 result is following:
+Test AUC: 0.7302735315438301
+Test Acc: 0.4340239912758997, 0.7339149400218102
+The task 1 result is following:
+Test AUC: 0.7302735315438301
+Test Acc: 0.4340239912758997, 0.7339149400218102
+Student train teacher passed.
+Teacher train student passed.
+
+======================== Task 2 ========================
+There are 456 instances that can be trusted.
+There are 464 instances that can be trusted.
+There are 479 instances that can be trusted.
+There are 484 instances that can be trusted.
+Joint train passed.
+The task 0 result is following:
+Test AUC: 0.7372935854814977
+Test Acc: 0.495092693565976, 0.7288258814976373
+The task 1 result is following:
+Test AUC: 0.7372935854814977
+Test Acc: 0.495092693565976, 0.7288258814976373
+The task 2 result is following:
+Test AUC: 0.7372935854814977
+Test Acc: 0.495092693565976, 0.7288258814976373
+
+======================== Final Result ========================
+The task 0 result is following:
+Test AUC: 0.8191817569078854
+Test Acc: 0.5354416575790621, 0.7968920392584514
+
+The task 1 result is following:
+Test AUC: 0.7438723933943945
+Test Acc: 0.44711014176663033, 0.7430025445292621
+
+The task 2 result is following:
+Test AUC: 0.7372935854814977
+Test Acc: 0.495092693565976, 0.7288258814976373
+
+The overall result is following:
+Test AUC: 0.7886828941851332
+Test Acc: 0.1723009814612868, 0.7603053435114504
+382.7120671272278 s.
+
+Process finished with exit code 0
+

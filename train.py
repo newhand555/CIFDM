@@ -79,7 +79,7 @@ def train_joint(model_old, model_new, model_assist, train_set, test_set, device,
 
     # todo there are two ways: 1. train one by one. 2. train mixed.
     for e in range(config.joint_epoch):
-        dataset_old = produce_pseudo_data(train_set, model_old, device)
+        dataset_old = produce_pseudo_data(train_set, model_old, device, None)
         if dataset_old is not None:
             loader_old = DataLoader(dataset_old, batch_size=config.ssl_batch, shuffle=False)
             model_old.train()

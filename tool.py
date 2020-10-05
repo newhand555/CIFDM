@@ -198,9 +198,9 @@ def produce_pseudo_data(data, model, device, method='mask'):
             for j in range(mask.shape[1]):
                 if mask[i][j] == 1:
                     preds.append(data_y[i][j].round())
-                    temp = data.all_y[i][: 7]
+                    temp = data.all_y[i]
                     reals.append(temp[j])
-        print(mask.shape[1]*mask.shape[0], np.sum(mask), accuracy_score(np.array(reals), np.array(preds)))
+        print('mask', mask.shape[1]*mask.shape[0], np.sum(mask), accuracy_score(np.array(reals), np.array(preds)))
 
     else:
         selected = data_select(data.data_x, data_y, -1)  # use inter or final to find suitable samples
@@ -216,14 +216,15 @@ def produce_pseudo_data(data, model, device, method='mask'):
             for t in selected:
                 selected_x.append(data.data_x[t])
                 selected_y.append(data_y[t].round())
-                # selected_truth.append(train_set.all_y[t][: 7]) # test selected performance
+                selected_truth.append(data.all_y[t][: model.get_out_dim()]) # test selected performance
 
             dataset = ParallelDataset(np.array(selected_x), mask, np.array(selected_y), data.task_id, None)
 
-        # selected_y = np.array(selected_y) > 0.5 # test selected performance
-        # selected_truth = np.array(selected_truth) # test selected performance
-        # print(selected_y.shape, selected_truth.shape) # test selected performance
-        # print("The selected accuracy is", accuracy_score(selected_truth, selected_y), accuracy_score(selected_truth.reshape(-1), selected_y.reshape(-1))) # test selected performance
+            selected_y = np.array(selected_y) > 0.5 # test selected performance
+            selected_truth = np.array(selected_truth) # test selected performance
+            print(selected_y.shape, selected_truth.shape) # test selected performance
+            print('None', data.data_x.shape[0], selected_y.shape[0], accuracy_score(selected_truth, selected_y), accuracy_score(selected_truth.reshape(-1), selected_y.reshape(-1)))
+            # print("The selected accuracy is", accuracy_score(selected_truth, selected_y), accuracy_score(selected_truth.reshape(-1), selected_y.reshape(-1))) # test selected performance
     return dataset
 
 def make_test(old_concate_model, new_concate_model, assist_model, test_data, device, method, config):

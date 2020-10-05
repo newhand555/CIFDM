@@ -12,7 +12,7 @@ class Config:
 
         self.first_epoch = 40
         self.joint_epoch = 4
-        self.ssl_epoch = 1
+        self.ssl_epoch = 0
         self.new_epoch = 16
         self.st_epoch = 65
         self.ts_epoch = 65
@@ -22,3 +22,10 @@ class Config:
         self.new_batch = 4
         self.st_batch = 4
         self.ts_batch = 4
+
+        # self.first_epoch = 1
+        # self.joint_epoch = 1
+        # self.ssl_epoch = 1
+        # self.new_epoch = 1
+        # self.st_epoch = 1
+        # self.ts_epoch = 1
