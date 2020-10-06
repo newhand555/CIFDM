@@ -9,7 +9,7 @@ from configuration import Config
 from dataset import load_dataset
 from model import OldFrontModel, OldEndModel, NewFrontModel, NewEndModel, IntermediaModel, AssistModel, ConcatOldModel, \
     ConcatNewModel, TeacherFrontModel, TeacherEndModel, ConcatTeacherModel
-from tool import CorrelationMLSMLoss, test_train, init_weights, make_test
+from tool import CorrelationMLSMLoss, test_train, init_weights, make_test, CorrelationMSELoss
 from train import train_single, train_joint, student_train_teacher, teacher_train_student
 from torch.utils.data import DataLoader
 
@@ -41,7 +41,7 @@ def main(opt):
 
         if i == 0:
             # Task 0, only train old model as base.
-            temp_criterion = CorrelationMLSMLoss()
+            temp_criterion = CorrelationMSELoss()
             train_single(old_concate_model, train_list[i], test_train_list[i], device, temp_criterion, config.first_batch, config.first_epoch)
             if test_train_flag: test_train(old_concate_model, None, None, test_train_list[i], i, device)
             make_test(old_concate_model, new_concate_model, assist_model, test_data, device, i, config)
@@ -51,7 +51,7 @@ def main(opt):
             if test_train_flag: test_train(old_concate_model, new_concate_model, assist_model, test_train_list[i], i, device)
             for j in range(i+1):
                 print("The task {} result is following:".format(j))
-                make_test(old_concate_model, new_concate_model, assist_model, test_data, device, i, config)
+                make_test(old_concate_model, new_concate_model, assist_model, test_data, device, j, config)
 
             if i != (config.task_num - 1):
                 teacher_front_model = TeacherFrontModel(copy.deepcopy(old_front_model), copy.deepcopy(new_front_model),

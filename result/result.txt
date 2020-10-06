@@ -137,3 +137,354 @@ Test Acc: 0.1723009814612868, 0.7603053435114504
 
 Process finished with exit code 0
 
+
+
+
+
+
+
+
+
+
+
+/usr/bin/python3.8 /home/yigong/PycharmProjects/CIFDM/main.py
+======================== Task 0 ========================
+Task 0 train Acc: 0.8
+Test AUC: 0.8051897519961451
+Test Acc: 0.4721919302071974, 0.7576335877862596
+
+======================== Task 1 ========================
+mask 2000 335 0.7611940298507462
+mask 2000 948 0.8048523206751055
+mask 2000 1227 0.8353708231458843
+mask 2000 1190 0.8302521008403362
+Joint train passed.
+The task 0 result is following:
+Test AUC: 0.7223353228460615
+Test Acc: 0.4176663031624864, 0.7288258814976373
+The task 1 result is following:
+Test AUC: 0.7223353228460615
+Test Acc: 0.4176663031624864, 0.7288258814976373
+Student train teacher passed.
+Teacher train student passed.
+
+======================== Task 2 ========================
+mask 3500 2059 0.8377853326857698
+mask 3500 2765 0.8126582278481013
+mask 3500 2761 0.8102136906917783
+mask 3500 3347 0.7815954586196594
+Joint train passed.
+The task 0 result is following:
+Test AUC: 0.7067905607935037
+Test Acc: 0.44492911668484186, 0.7066521264994547
+The task 1 result is following:
+Test AUC: 0.7067905607935037
+Test Acc: 0.44492911668484186, 0.7066521264994547
+The task 2 result is following:
+Test AUC: 0.7067905607935037
+Test Acc: 0.44492911668484186, 0.7066521264994547
+
+======================== Final Result ========================
+The task 0 result is following:
+Test AUC: 0.8059988681380872
+Test Acc: 0.5354416575790621, 0.7968920392584514
+
+The task 1 result is following:
+Test AUC: 0.6725386394061094
+Test Acc: 0.48636859323882226, 0.7411850236277717
+
+The task 2 result is following:
+Test AUC: 0.7067905607935037
+Test Acc: 0.44492911668484186, 0.7066521264994547
+
+The overall result is following:
+Test AUC: 0.7644325876384276
+Test Acc: 0.14285714285714285, 0.7531079607415485
+402.98818039894104 s.
+
+Process finished with exit code 0
+
+
+
+
+
+
+
+/usr/bin/python3.8 /home/yigong/PycharmProjects/CIFDM/main.py
+======================== Task 0 ========================
+Task 0 train Acc: 0.726
+Test AUC: 0.8115230748214766
+Test Acc: 0.4961832061068702, 0.7693565976008724
+
+======================== Task 1 ========================
+mask 2000 335 0.7223880597014926
+mask 2000 937 0.8068303094983992
+mask 2000 1153 0.8308759757155247
+mask 2000 1255 0.8270916334661355
+Joint train passed.
+The task 0 result is following:
+Test AUC: 0.7277515860543624
+Test Acc: 0.42748091603053434, 0.7415485278080698
+The task 1 result is following:
+Test AUC: 0.7277515860543624
+Test Acc: 0.42748091603053434, 0.7415485278080698
+Student train teacher passed.
+Teacher train student passed.
+
+======================== Task 2 ========================
+mask 3500 2021 0.8406729341909945
+mask 3500 2700 0.8081481481481482
+mask 3500 2957 0.8028407169428475
+mask 3500 3198 0.7901813633520951
+Joint train passed.
+The task 0 result is following:
+Test AUC: 0.698679915950612
+Test Acc: 0.4394765539803708, 0.6990185387131952
+The task 1 result is following:
+Test AUC: 0.698679915950612
+Test Acc: 0.4394765539803708, 0.6990185387131952
+The task 2 result is following:
+Test AUC: 0.698679915950612
+Test Acc: 0.4394765539803708, 0.6990185387131952
+
+======================== Final Result ========================
+The task 0 result is following:
+Test AUC: 0.8038484806179906
+Test Acc: 0.5354416575790621, 0.7968920392584514
+
+The task 1 result is following:
+Test AUC: 0.6583018503526623
+Test Acc: 0.45038167938931295, 0.7357324609233006
+
+The task 2 result is following:
+Test AUC: 0.698679915950612
+Test Acc: 0.4394765539803708, 0.6990185387131952
+
+The overall result is following:
+Test AUC: 0.7551125503988709
+Test Acc: 0.1406761177753544, 0.7491821155943293
+399.1861517429352 s.
+
+Process finished with exit code 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/usr/bin/python3.8 /home/yigong/PycharmProjects/CIFDM/main.py
+======================== Task 0 ========================
+Task 0 train Acc: 0.786
+Test AUC: 0.8085748297328416
+Test Acc: 0.4940021810250818, 0.7633587786259542
+
+======================== Task 1 ========================
+mask 2000 331 0.6586102719033232
+mask 2000 643 0.7744945567651633
+mask 2000 940 0.8393617021276596
+mask 2000 1072 0.8274253731343284
+Joint train passed.
+The task 0 result is following:
+Test AUC: 0.7180943801556687
+Test Acc: 0.430752453653217, 0.7379134860050891
+The task 1 result is following:
+Test AUC: 0.7180943801556687
+Test Acc: 0.430752453653217, 0.7379134860050891
+Student train teacher passed.
+Teacher train student passed.
+
+======================== Task 2 ========================
+mask 3500 2199 0.8281036834924966
+mask 3500 2394 0.8049289891395155
+mask 3500 3095 0.7815831987075929
+mask 3500 3380 0.7751479289940828
+Joint train passed.
+The task 0 result is following:
+Test AUC: 0.6955353304146153
+Test Acc: 0.42311886586695746, 0.6924754634678298
+The task 1 result is following:
+Test AUC: 0.6955353304146153
+Test Acc: 0.42311886586695746, 0.6924754634678298
+The task 2 result is following:
+Test AUC: 0.6955353304146153
+Test Acc: 0.42311886586695746, 0.6924754634678298
+
+======================== Final Result ========================
+The task 0 result is following:
+Test AUC: 0.8116023351782383
+Test Acc: 0.5354416575790621, 0.7968920392584514
+
+The task 1 result is following:
+Test AUC: 0.5252750130958618
+Test Acc: 0.4678298800436205, 0.7259178480552526
+
+The task 2 result is following:
+Test AUC: 0.6955353304146153
+Test Acc: 0.42311886586695746, 0.6924754634678298
+
+The overall result is following:
+Test AUC: 0.7177012511464353
+Test Acc: 0.12431842966194111, 0.7442748091603053
+399.7643575668335 s.
+
+Process finished with exit code 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/usr/bin/python3.8 /home/yigong/PycharmProjects/CIFDM/main.py
+======================== Task 0 ========================
+Task 0 train Acc: 0.842
+Test AUC: 0.8168950655924486
+Test Acc: 0.4798255179934569, 0.7622682660850599
+
+======================== Task 1 ========================
+mask 2000 310 0.7258064516129032
+mask 2000 807 0.7769516728624535
+mask 2000 979 0.8110316649642493
+mask 2000 1142 0.8222416812609457
+Joint train passed.
+The task 0 result is following:
+Test AUC: 0.7231157832912678
+Test Acc: 0.40567066521264994, 0.7237368229734642
+The task 1 result is following:
+Test AUC: 0.7231157832912678
+Test Acc: 0.40567066521264994, 0.7237368229734642
+Student train teacher passed.
+Teacher train student passed.
+
+======================== Task 2 ========================
+mask 3500 2061 0.8398835516739447
+mask 3500 2727 0.8115144847818115
+mask 3500 2832 0.8050847457627118
+mask 3500 3256 0.7877764127764127
+Joint train passed.
+The task 0 result is following:
+Test AUC: 0.6911941916301827
+Test Acc: 0.4372955288985823, 0.6986550345328971
+The task 1 result is following:
+Test AUC: 0.6911941916301827
+Test Acc: 0.4372955288985823, 0.6986550345328971
+The task 2 result is following:
+Test AUC: 0.6911941916301827
+Test Acc: 0.4372955288985823, 0.6986550345328971
+
+======================== Final Result ========================
+The task 0 result is following:
+Test AUC: 0.7967356141701906
+Test Acc: 0.5354416575790621, 0.7968920392584514
+
+The task 1 result is following:
+Test AUC: 0.4563970638813488
+Test Acc: 0.4994547437295529, 0.7415485278080698
+
+The task 2 result is following:
+Test AUC: 0.6911941916301827
+Test Acc: 0.4372955288985823, 0.6986550345328971
+
+The overall result is following:
+Test AUC: 0.7160467536467605
+Test Acc: 0.1450381679389313, 0.7508178844056707
+422.22980523109436 s.
+
+Process finished with exit code 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/usr/bin/python3.8 /home/yigong/PycharmProjects/CIFDM/main.py
+======================== Task 0 ========================
+Task 0 train Acc: 0.844
+Test AUC: 0.7974543614962795
+Test Acc: 0.45910577971646677, 0.7494547437295529
+
+======================== Task 1 ========================
+mask 2000 325 0.7169230769230769
+mask 2000 626 0.7699680511182109
+mask 2000 939 0.8104366347177849
+mask 2000 1169 0.8280581693755347
+Joint train passed.
+The task 0 result is following:
+Test AUC: 0.8103128532377405
+Test Acc: 0.5354416575790621, 0.7968920392584514
+The task 1 result is following:
+Test AUC: 0.6913662555359779
+Test Acc: 0.4143947655398037, 0.72264631043257
+Student train teacher passed.
+Teacher train student passed.
+
+======================== Task 2 ========================
+mask 3500 2077 0.8372652864708714
+mask 3500 2606 0.8158096699923254
+mask 3500 2989 0.8012713282034125
+mask 3500 3172 0.7938209331651954
+Joint train passed.
+The task 0 result is following:
+Test AUC: 0.7819407979176143
+Test Acc: 0.5354416575790621, 0.7968920392584514
+The task 1 result is following:
+Test AUC: 0.46834637628246845
+Test Acc: 0.48527808069792805, 0.7346419483824064
+The task 2 result is following:
+Test AUC: 0.7160747482454387
+Test Acc: 0.4798255179934569, 0.7171937477280989
+
+======================== Final Result ========================
+The task 0 result is following:
+Test AUC: 0.7819407979176143
+Test Acc: 0.5354416575790621, 0.7968920392584514
+
+The task 1 result is following:
+Test AUC: 0.46834637628246845
+Test Acc: 0.48527808069792805, 0.7346419483824064
+
+The task 2 result is following:
+Test AUC: 0.7160747482454387
+Test Acc: 0.4798255179934569, 0.7171937477280989
+
+The overall result is following:
+Test AUC: 0.7226103107216179
+Test Acc: 0.15485278080697928, 0.7543075245365322
+383.49934673309326 s.
+
+Process finished with exit code 0

@@ -301,7 +301,7 @@ def calc_influence(original, train_set, test_set):
     for i in range(len(train_set)):
         pass
 
-def data_select_mask(data_y, confident=0.999):
+def data_select_mask(data_y, confident=0.9):
     round0 = np.logical_and((confident-1) < data_y, data_y < (1-confident))
     round1 = np.logical_and(confident < data_y, data_y < (2-confident))
     psedu = np.logical_or(round0, round1).astype(int)

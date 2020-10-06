@@ -22,20 +22,21 @@ class OldEndModel(nn.Module):
         self.out_dim = output
         self.layers = nn.Sequential(
             nn.Linear(64, 32, True),
+            nn.Linear(32, 16, True),
             nn.Dropout(0.2, inplace=False),
             nn.ReLU(),
         )
         self.out_layer = nn.Sequential(
-            nn.Linear(32, output, bias=True),
-            nn.Sigmoid()
+            nn.Linear(16, output, bias=True),
+            MyActivation()
 
         )
 
     def modify_out_layer(self, output):
         self.out_dim = output
         self.out_layer = nn.Sequential(
-            nn.Linear(32, output, bias=True),
-            nn.Sigmoid()
+            nn.Linear(16, output, bias=True),
+            MyActivation()
         )
 
     def forward(self, x):
@@ -72,14 +73,14 @@ class NewEndModel(nn.Module):
         )
         self.out_layer = nn.Sequential(
             nn.Linear(32 + output, output, bias=True),
-            nn.Sigmoid()
+            MyActivation()
         )
 
     def modify_out_layer(self, output):
         self.out_dim = output
         self.out_layer = nn.Sequential(
             nn.Linear(32 + output, output, bias=True),
-            nn.Sigmoid()
+            MyActivation()
         )
 
     def forward(self, x1, x2):
@@ -203,3 +204,25 @@ class ConcatTeacherModel(nn.Module):
         x = self.front(x)
         y = self.end(x)
         return y
+
+class MyActivation(nn.Module):
+    def __init__(self):
+        super(MyActivation, self).__init__()
+
+    def forward(self, x):
+        y = torch.zeros(x.shape, device=x.device)
+        mask_l = x < 0
+        mask_m = torch.logical_and(0 <= x, x <= 1)
+        mask_h = 1 < x
+        # y[mask_l] = torch.masked_select(x - torch.square(0.5 * x), mask_l)
+        y[mask_l] = torch.masked_select(x - 0.5 * torch.square(x), mask_l)
+        y[mask_m] = torch.masked_select(x, mask_m)
+        y[mask_h] = torch.masked_select(0.5 * torch.square(0.5 * x) + 0.5, mask_h)
+
+        return y
+        # if x < 0:
+        #     return x - ((0.5 * x) ** 2) x - (0.5 * (x ** 2))
+        # elif x <= 1:
+        #     return x
+        # else:
+        #     return 0.5 * (x ** 2) + 0.5

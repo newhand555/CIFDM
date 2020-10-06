@@ -79,12 +79,12 @@ def train_joint(model_old, model_new, model_assist, train_set, test_set, device,
 
     # todo there are two ways: 1. train one by one. 2. train mixed.
     for e in range(config.joint_epoch):
-        dataset_old = produce_pseudo_data(train_set, model_old, device, None)
+        dataset_old = produce_pseudo_data(train_set, model_old, device, 'mask')
         if dataset_old is not None:
             loader_old = DataLoader(dataset_old, batch_size=config.ssl_batch, shuffle=False)
             model_old.train()
             optimizer_old = torch.optim.Adam(model_old.parameters(), weight_decay=1e-08)
-            criterion = CorrelationMLSMLoss().to(device)
+            criterion = torch.nn.MSELoss().to(device)
 
             for e2 in range(config.ssl_epoch):
                 for x, m, y in loader_old:
@@ -183,7 +183,7 @@ def teacher_train_student(teacher_model, old_model, new_model, train_set, device
     temp_criterion = torch.nn.MSELoss()
     train_single(old_front, train_inter, None, device, temp_criterion, config.ts_batch, config.ts_epoch)
     train_single(new_front, train_inter, None, device, temp_criterion, config.ts_batch, config.ts_epoch)
-    temp_criterion = CorrelationMLSMLoss()
+    temp_criterion = torch.nn.MSELoss()
     train_single(old_end, train_label, None, device, temp_criterion, config.ts_batch, config.ts_epoch)
 
     print("Teacher train student passed.")
@@ -224,7 +224,7 @@ def student_train_teacher(teacher_model, train_set, device, config):
     temp_criterion = torch.nn.MSELoss()
     # Train intermedia layer to compress information from both old and new front models.
     train_single(teacher_front, train_inter, None, device, temp_criterion, config.st_batch, config.st_epoch)
-    temp_criterion = CorrelationMLSMLoss()
+    temp_criterion = torch.nn.MSELoss()
     # Train whole model to has ability has same performance of combination task from both old and new models.
     train_single(teacher_model, train_all, None, device, temp_criterion, config.st_batch, config.st_epoch)
 
