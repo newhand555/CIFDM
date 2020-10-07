@@ -239,8 +239,8 @@ def load_dataset(shuffle, config):
 
     total = 0
 
-    for t in config.test_instance_list:
-        total += t
+    # for t in config.test_instance_list:
+    #     total += t
 
     if total > train_data.shape[0]:
         print('Error test intance number.')

@@ -5,15 +5,15 @@ class Config:
 
         self.data_name = 'yeast'
         self.attri_num = 103
-        self.label_list = [6, 2, 2, 2] # [14] [6, 5, 3]
-        self.train_instance_list = [400, 400, 400, 300] # [1500] [500, 500, 500]
-        self.test_instance_list = [250, 250, 250, 150] # [900] [300, 300, 300]
+        self.label_list = [6, 5, 3] # [14] [6, 2, 2, 2] [7, 6]
+        self.train_instance_list = [500, 500, 500] # [1500] [400, 400, 400, 300] [800, 700]
+        # self.test_instance_list = [450, 450] # [900] [250, 250, 250, 150] [300, 300, 300]
         self.task_num = len(self.label_list)
 
-        self.first_epoch = 40
+        self.first_epoch = 60
         self.joint_epoch = 4
         self.ssl_epoch = 4
-        self.new_epoch = 16
+        self.new_epoch = 20
         self.st_epoch = 65
         self.ts_epoch = 65
 

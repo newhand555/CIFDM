@@ -44,6 +44,7 @@ def main(opt):
             temp_criterion = CorrelationMSELoss()
             train_single(old_concate_model, train_list[i], test_train_list[i], device, temp_criterion, config.first_batch, config.first_epoch)
             if test_train_flag: test_train(old_concate_model, None, None, test_train_list[i], i, device)
+            print("The task {} result is following:".format(0))
             make_test(old_concate_model, new_concate_model, assist_model, test_data, device, i, config)
         else:
             # Other tasks need to adjust old model and train new model.
@@ -52,6 +53,7 @@ def main(opt):
             for j in range(i+1):
                 print("The task {} result is following:".format(j))
                 make_test(old_concate_model, new_concate_model, assist_model, test_data, device, j, config)
+                print()
 
             if i != (config.task_num - 1):
                 teacher_front_model = TeacherFrontModel(copy.deepcopy(old_front_model), copy.deepcopy(new_front_model),
@@ -67,12 +69,12 @@ def main(opt):
     print("======================== Final Result ========================")
 
     for i in range(config.task_num):
-        print("The task {} result is following:".format(i))
-        make_test(old_concate_model, new_concate_model, assist_model, test_data, device, i, config)
+        print("Until the task {} result is following:".format(i))
+        make_test(old_concate_model, new_concate_model, assist_model, test_data, device, i+5, config)
         print()
 
-    print("The overall result is following:")
-    make_test(old_concate_model, new_concate_model, assist_model, test_data, device, -1, config)
+    # print("The overall result is following:")
+    # make_test(old_concate_model, new_concate_model, assist_model, test_data, device, -1, config)
 
 
 

@@ -236,6 +236,9 @@ def make_test(old_concate_model, new_concate_model, assist_model, test_data, dev
         if method == -1:
             s_idx = label_index[0]
             e_idx = label_index[-1]
+        elif method >= 5:
+            s_idx = label_index[0]
+            e_idx = label_index[method-5+1]
         else:
             s_idx = label_index[method]
             e_idx = label_index[method+1]
@@ -267,6 +270,8 @@ def make_test(old_concate_model, new_concate_model, assist_model, test_data, dev
 
     real_label = np.array(test_data.data_y)[:, s_idx: e_idx]
     pred_label = outputs[:, s_idx: e_idx]
+    # print("In the test, there are {} instances and each one has {} labels.".format(len(test_data), test_data.get_label_num()))
+    print("The test shape is {}.".format(real_label.shape))
     print("Test AUC: {}".format(roc_auc_score(real_label, pred_label, average='micro')))
 
     pred_label = np.array(pred_label) > 0.5
