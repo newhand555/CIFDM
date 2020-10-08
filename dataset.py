@@ -209,12 +209,21 @@ def load_dataset(shuffle, config):
     :return: A tuple of lists. Each list contains a dataset for a task.
     '''
     if config.data_name == "yeast":
-        train_path = 'data/yeast-train.arff'
-        test_path = 'data/yeast-test.arff'
+        train_path = 'data/yeast/yeast-train.arff'
+        test_path = 'data/yeast/yeast-test.arff'
         train_data = arff.load(open(train_path, 'rt'))
         train_data = np.array(train_data['data']).astype(np.float32)
         test_data = arff.load(open(test_path, 'rt'))
         test_data = np.array(test_data['data']).astype(np.float32)
+    elif config.data_name == 'nuswide':
+        train_path = 'data/nuswide-cVLADplus/nus-wide-full-cVLADplus-train.arff'
+        test_path = 'data/nuswide-cVLADplus/nus-wide-full-cVLADplus-test.arff'
+        train_data = arff.load(open(train_path, 'rt'))
+        train_data = np.array(train_data['data'])
+        train_data = train_data[:, 1:].astype(np.float32)
+        test_data = arff.load(open(test_path, 'rt'))
+        test_data = np.array(test_data['data'])
+        test_data = test_data[:, 1:].astype(np.float32)
     else:
         print("The dataset {} is not supported.".format(config.data_name))
         return None
@@ -225,6 +234,7 @@ def load_dataset(shuffle, config):
         total += t
 
     if total > train_data.shape[1]:
+        print(total)
         print("Error feature number.")
         return
 

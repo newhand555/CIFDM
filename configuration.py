@@ -3,10 +3,10 @@ class Config:
         self.data = args.data
         self.log = args.log
 
-        self.data_name = 'yeast'
-        self.attri_num = 103
-        self.label_list = [6, 5, 3] # [14] [6, 2, 2, 2] [7, 6]
-        self.train_instance_list = [500, 500, 500] # [1500] [400, 400, 400, 300] [800, 700]
+        self.data_name = 'nuswide'
+        self.attri_num = 128
+        self.label_list = [30, 20, 15] # [14] [7, 6] [6, 5, 3] [4, 4, 3, 2]
+        self.train_instance_list = [60000, 50000, 50000] # [1500] [800, 700] [500, 500, 500] [400, 400, 400, 300]
         # self.test_instance_list = [450, 450] # [900] [250, 250, 250, 150] [300, 300, 300]
         self.task_num = len(self.label_list)
 
@@ -17,11 +17,11 @@ class Config:
         self.st_epoch = 65
         self.ts_epoch = 65
 
-        self.first_batch = 4
-        self.ssl_batch = 4
-        self.new_batch = 4
-        self.st_batch = 4
-        self.ts_batch = 4
+        self.first_batch = 32
+        self.ssl_batch = 32
+        self.new_batch = 32
+        self.st_batch = 32
+        self.ts_batch = 32
 
         # self.first_epoch = 1
         # self.joint_epoch = 1

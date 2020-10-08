@@ -28,6 +28,45 @@ def correlation_plus_MLSMLoss(pred, label, device):
     loss = MLSM(pred, label) + label_correlation_loss(pred, label)
     return loss
 
+class IntervalLoss(torch.nn.Module):
+    def __init__(self, loss_function):
+        super(IntervalLoss, self).__init__()
+        self.loss_function = loss_function()
+
+    # def forward(self, pred, label):
+    #     loss = torch.zeros(pred.shape, device=pred.device)
+    #     mask_round_one = torch.logical_and(0.8 < pred, pred < 1.2)
+    #     mask_round_zero = torch.logical_and(-0.2 < pred, pred < 0.2)
+    #     mask_one = torch.logical_and(label == 1, mask_round_zero)
+    #     mask_zero = torch.logical_and(label == 0, mask_round_one)
+    #     loss[mask_one] = torch.masked_select((1 / (torch.square(pred) * 50)) - 0.5, mask_one)
+    #     loss[mask_zero] = torch.masked_select((1 / (torch.square(pred-1) * 50)) - 0.5, mask_zero)
+    #     loss = loss.sum()
+    #     loss += self.loss_function(pred, label)
+    #     return loss
+
+    def forward(self, pred, label):
+        loss = torch.zeros(pred.shape, device=pred.device)
+
+        mask_round_zero = torch.logical_and(-0.2 < pred, pred < 0)
+        mask_one = torch.logical_and(label == 1, mask_round_zero)
+        loss[mask_one] = torch.masked_select(0.2 - (1 * pred), mask_one)
+
+        mask_round_zero = torch.logical_and(0 <= pred, pred < 0.2)
+        mask_one = torch.logical_and(label == 1, mask_round_zero)
+        loss[mask_one] = torch.masked_select(0.2 - (1 * pred), mask_one)
+
+        mask_round_one = torch.logical_and(0.8 < pred, pred < 1)
+        mask_zero = torch.logical_and(label == 0, mask_round_one)
+        loss[mask_zero] = torch.masked_select(0.2 * (pred - 1) + 1, mask_zero)
+
+        mask_round_one = torch.logical_and(1 <= pred, pred < 1.2)
+        mask_zero = torch.logical_and(label == 0, mask_round_one)
+        loss[mask_zero] = torch.masked_select(0.2 - (1 * (pred - 1)), mask_zero)
+
+        loss = loss.sum()
+        loss += self.loss_function(pred, label)
+        return loss
 
 class CorrelationMSELoss(torch.nn.Module):
     def __init__(self):
@@ -200,7 +239,7 @@ def produce_pseudo_data(data, model, device, method='mask'):
                     preds.append(data_y[i][j].round())
                     temp = data.all_y[i]
                     reals.append(temp[j])
-        print('mask', mask.shape[1]*mask.shape[0], np.sum(mask), accuracy_score(np.array(reals), np.array(preds)))
+        print('mask', mask.shape, mask.shape[1]*mask.shape[0], np.sum(mask), accuracy_score(np.array(reals), np.array(preds)))
 
     else:
         selected = data_select(data.data_x, data_y, -1)  # use inter or final to find suitable samples

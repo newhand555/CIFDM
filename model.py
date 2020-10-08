@@ -6,7 +6,7 @@ class OldFrontModel(nn.Module):
     def __init__(self):
         super(OldFrontModel, self).__init__()
         self.layers = nn.Sequential(
-            nn.Linear(103, 64, True),
+            nn.Linear(128, 64, True),
             nn.Dropout(0.2, inplace=False),
             nn.ReLU(),
         )
@@ -52,7 +52,7 @@ class NewFrontModel(nn.Module):
     def __init__(self):
         super(NewFrontModel, self).__init__()
         self.layers = nn.Sequential(
-            nn.Linear(103, 64, True),
+            nn.Linear(128, 64, True),
             nn.Dropout(0.2, inplace=False),
             nn.ReLU()
         )

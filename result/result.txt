@@ -488,3 +488,437 @@ Test Acc: 0.15485278080697928, 0.7543075245365322
 383.49934673309326 s.
 
 Process finished with exit code 0
+
+
+
+
+
+
+
+
+
+/usr/bin/python3.8 /home/yigong/PycharmProjects/CIFDM/main.py
+======================== Task 0 ========================
+Task 0 train Acc: 0.9675
+The task 0 result is following:
+The test shape is (917, 4).
+Test AUC: 0.8026546214942679
+Test Acc: 0.46455834242093785, 0.7388222464558343
+
+======================== Task 1 ========================
+mask (400, 4) 1600 222 0.6891891891891891
+mask (400, 4) 1600 475 0.7621052631578947
+mask (400, 4) 1600 715 0.7692307692307693
+mask (400, 4) 1600 973 0.8016443987667009
+Joint train passed.
+The task 0 result is following:
+The test shape is (917, 4).
+Test AUC: 0.7999315478737059
+Test Acc: 0.5114503816793893, 0.7835332606324973
+
+The task 1 result is following:
+The test shape is (917, 4).
+Test AUC: 0.7100039515279241
+Test Acc: 0.3107960741548528, 0.7251908396946565
+
+Student train teacher passed.
+Teacher train student passed.
+
+======================== Task 2 ========================
+mask (400, 8) 3200 1867 0.83663631494376
+mask (400, 8) 3200 2178 0.8223140495867769
+mask (400, 8) 3200 2326 0.8048151332760103
+mask (400, 8) 3200 2410 0.7879668049792531
+Joint train passed.
+The task 0 result is following:
+The test shape is (917, 4).
+Test AUC: 0.7879803470342667
+Test Acc: 0.5354416575790621, 0.7968920392584514
+
+The task 1 result is following:
+The test shape is (917, 4).
+Test AUC: 0.5520602827537759
+Test Acc: 0.3107960741548528, 0.7314612868047983
+
+The task 2 result is following:
+The test shape is (917, 3).
+Test AUC: 0.7890604232773692
+Test Acc: 0.5278080697928026, 0.8062522719011269
+
+Student train teacher passed.
+Teacher train student passed.
+
+======================== Task 3 ========================
+mask (300, 11) 3300 2487 0.8082026537997588
+mask (300, 11) 3300 2702 0.7986676535899334
+mask (300, 11) 3300 2752 0.7936046511627907
+mask (300, 11) 3300 2826 0.7905166312809625
+Joint train passed.
+The task 0 result is following:
+The test shape is (917, 4).
+Test AUC: 0.8160069893223691
+Test Acc: 0.5354416575790621, 0.7968920392584514
+
+The task 1 result is following:
+The test shape is (917, 4).
+Test AUC: 0.6035223480857043
+Test Acc: 0.29770992366412213, 0.7287350054525628
+
+The task 2 result is following:
+The test shape is (917, 3).
+Test AUC: 0.6677183031842258
+Test Acc: 0.5321701199563795, 0.8226099600145401
+
+The task 3 result is following:
+The test shape is (917, 2).
+Test AUC: 0.7653122188955868
+Test Acc: 0.6281352235550709, 0.7982551799345693
+
+
+======================== Final Result ========================
+Until the task 0 result is following:
+The test shape is (917, 4).
+Test AUC: 0.8160069893223691
+Test Acc: 0.5354416575790621, 0.7968920392584514
+
+Until the task 1 result is following:
+The test shape is (917, 8).
+Test AUC: 0.760033571134199
+Test Acc: 0.17121046892039257, 0.762813522355507
+
+Until the task 2 result is following:
+The test shape is (917, 11).
+Test AUC: 0.7282995577274654
+Test Acc: 0.11123227917121047, 0.7791216417170616
+
+Until the task 3 result is following:
+The test shape is (917, 13).
+Test AUC: 0.7362256403087978
+Test Acc: 0.0861504907306434, 0.7820652629812935
+
+895.3929307460785 s.
+
+Process finished with exit code 0
+
+
+
+
+
+
+
+/usr/bin/python3.8 /home/yigong/PycharmProjects/CIFDM/main.py
+======================== Task 0 ========================
+Task 0 train Acc: 0.975
+The task 0 result is following:
+The test shape is (917, 4).
+Test AUC: 0.8012333391877916
+Test Acc: 0.4536532170119956, 0.7437295528898582
+
+======================== Task 1 ========================
+mask (400, 4) 1600 240 0.7458333333333333
+mask (400, 4) 1600 337 0.7537091988130564
+mask (400, 4) 1600 538 0.8364312267657993
+mask (400, 4) 1600 913 0.8203723986856517
+Joint train passed.
+The task 0 result is following:
+The test shape is (917, 4).
+Test AUC: 0.8080521316982883
+Test Acc: 0.5321701199563795, 0.7958015267175572
+
+The task 1 result is following:
+The test shape is (917, 4).
+Test AUC: 0.7144797886664326
+Test Acc: 0.33151581243184297, 0.7355507088331515
+
+Student train teacher passed.
+Teacher train student passed.
+
+======================== Task 2 ========================
+mask (400, 8) 3200 1826 0.8329682365826944
+mask (400, 8) 3200 2259 0.8127490039840638
+mask (400, 8) 3200 2382 0.8064651553316541
+mask (400, 8) 3200 2492 0.7961476725521669
+Joint train passed.
+The task 0 result is following:
+The test shape is (917, 4).
+Test AUC: 0.823200467155739
+Test Acc: 0.5354416575790621, 0.7968920392584514
+
+The task 1 result is following:
+The test shape is (917, 4).
+Test AUC: 0.7041743501931857
+Test Acc: 0.3326063249727372, 0.7505452562704471
+
+The task 2 result is following:
+The test shape is (917, 3).
+Test AUC: 0.775761423825719
+Test Acc: 0.5179934569247546, 0.7975281715739732
+
+Student train teacher passed.
+Teacher train student passed.
+
+======================== Task 3 ========================
+mask (300, 11) 3300 2353 0.8380790480237994
+mask (300, 11) 3300 3004 0.797936085219707
+mask (300, 11) 3300 3260 0.7763803680981595
+mask (300, 11) 3300 3284 0.7743605359317906
+Joint train passed.
+The task 0 result is following:
+The test shape is (917, 4).
+Test AUC: 0.7824571911510615
+Test Acc: 0.5354416575790621, 0.7968920392584514
+
+The task 1 result is following:
+The test shape is (917, 4).
+Test AUC: 0.5783108681653202
+Test Acc: 0.2529989094874591, 0.7164667393675027
+
+The task 2 result is following:
+The test shape is (917, 3).
+Test AUC: 0.6145564822986334
+Test Acc: 0.386041439476554, 0.777171937477281
+
+The task 3 result is following:
+The test shape is (917, 2).
+Test AUC: 0.7548551347287301
+Test Acc: 0.6183206106870229, 0.792257360959651
+
+
+======================== Final Result ========================
+Until the task 0 result is following:
+The test shape is (917, 4).
+Test AUC: 0.7824571911510615
+Test Acc: 0.5354416575790621, 0.7968920392584514
+
+Until the task 1 result is following:
+The test shape is (917, 8).
+Test AUC: 0.7084952500476063
+Test Acc: 0.12758996728462377, 0.7566793893129771
+
+Until the task 2 result is following:
+The test shape is (917, 11).
+Test AUC: 0.6868606808081537
+Test Acc: 0.017448200654307525, 0.7622682660850599
+
+Until the task 3 result is following:
+The test shape is (917, 13).
+Test AUC: 0.6954543529951623
+Test Acc: 0.010905125408942203, 0.7668819729888432
+
+900.9905488491058 s.
+
+Process finished with exit code 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+======================== Task 0 ========================
+Task 0 train Acc: 0.9525
+The task 0 result is following:
+The test shape is (917, 4).
+Test AUC: 0.807319273626867
+Test Acc: 0.4787350054525627, 0.7559978189749182
+
+======================== Task 1 ========================
+mask (400, 4) 1600 199 0.7889447236180904
+mask (400, 4) 1600 356 0.7893258426966292
+mask (400, 4) 1600 753 0.8087649402390438
+mask (400, 4) 1600 909 0.8217821782178217
+Joint train passed.
+The task 0 result is following:
+The test shape is (917, 4).
+Test AUC: 0.8054110204921048
+Test Acc: 0.5332606324972737, 0.7966194111232279
+
+The task 1 result is following:
+The test shape is (917, 4).
+Test AUC: 0.7015228017796511
+Test Acc: 0.31406761177753545, 0.7189203925845147
+
+Student train teacher passed.
+Teacher train student passed.
+
+======================== Task 2 ========================
+mask (400, 8) 3200 1870 0.8315508021390374
+mask (400, 8) 3200 2125 0.8070588235294117
+mask (400, 8) 3200 2299 0.7877337973031753
+mask (400, 8) 3200 2357 0.7806533729316928
+Joint train passed.
+The task 0 result is following:
+The test shape is (917, 4).
+Test AUC: 0.8175525662792216
+Test Acc: 0.17884405670665213, 0.5493456924754635
+
+The task 1 result is following:
+The test shape is (917, 4).
+Test AUC: 0.6640030441400304
+Test Acc: 0.3031624863685932, 0.7295528898582334
+
+The task 2 result is following:
+The test shape is (917, 3).
+Test AUC: 0.7892408014715822
+Test Acc: 0.5016357688113413, 0.792075608869502
+
+Student train teacher passed.
+Teacher train student passed.
+
+======================== Task 3 ========================
+mask (300, 11) 3300 2444 0.8011456628477905
+mask (300, 11) 3300 2565 0.7902534113060429
+mask (300, 11) 3300 2635 0.7787476280834915
+mask (300, 11) 3300 2683 0.772642564293701
+Joint train passed.
+The task 0 result is following:
+The test shape is (917, 4).
+Test AUC: 0.8124746494455528
+Test Acc: 0.17884405670665213, 0.5493456924754635
+
+The task 1 result is following:
+The test shape is (917, 4).
+Test AUC: 0.43947832513757173
+Test Acc: 0.2529989094874591, 0.7164667393675027
+
+The task 2 result is following:
+The test shape is (917, 3).
+Test AUC: 0.2731829650073898
+Test Acc: 0.38276990185387133, 0.7760814249363868
+
+The task 3 result is following:
+The test shape is (917, 2).
+Test AUC: 0.7524384758938282
+Test Acc: 0.6248636859323882, 0.7977099236641222
+
+
+======================== Final Result ========================
+Until the task 0 result is following:
+The test shape is (917, 4).
+Test AUC: 0.8124746494455528
+Test Acc: 0.17884405670665213, 0.5493456924754635
+
+Until the task 1 result is following:
+The test shape is (917, 8).
+Test AUC: 0.7000993473958979
+Test Acc: 0.03162486368593239, 0.6329062159214831
+
+Until the task 2 result is following:
+The test shape is (917, 11).
+Test AUC: 0.6303501446825431
+Test Acc: 0.0, 0.671954000198275
+
+Until the task 3 result is following:
+The test shape is (917, 13).
+Test AUC: 0.6295330461208714
+Test Acc: 0.0, 0.6913010653468669
+
+867.1853542327881 s.
+yigong@lambda-quad-4:~/PycharmProjects/CIFDM$ python3 main.py
+======================== Task 0 ========================
+Task 0 train Acc: 0.9825
+The task 0 result is following:
+The test shape is (917, 4).
+Test AUC: 0.801068513673162
+Test Acc: 0.4536532170119956, 0.7388222464558343
+
+======================== Task 1 ========================
+mask (400, 4) 1600 217 0.7695852534562212
+mask (400, 4) 1600 331 0.7794561933534743
+mask (400, 4) 1600 563 0.8330373001776199
+mask (400, 4) 1600 897 0.8372352285395763
+Joint train passed.
+The task 0 result is following:
+The test shape is (917, 4).
+Test AUC: 0.8035764734845585
+Test Acc: 0.514721919302072, 0.7859869138495092
+
+The task 1 result is following:
+The test shape is (917, 4).
+Test AUC: 0.6992737238028334
+Test Acc: 0.33478735005452565, 0.7281897491821155
+
+Student train teacher passed.
+Teacher train student passed.
+
+======================== Task 2 ========================
+mask (400, 8) 3200 1919 0.8233454924439813
+mask (400, 8) 3200 2347 0.804005112910098
+mask (400, 8) 3200 2565 0.791812865497076
+mask (400, 8) 3200 2688 0.7831101190476191
+Joint train passed.
+The task 0 result is following:
+The test shape is (917, 4).
+Test AUC: 0.8023856166470767
+Test Acc: 0.5354416575790621, 0.7968920392584514
+
+The task 1 result is following:
+The test shape is (917, 4).
+Test AUC: 0.5978197078796393
+Test Acc: 0.25081788440567065, 0.7164667393675027
+
+The task 2 result is following:
+The test shape is (917, 3).
+Test AUC: 0.7736485306202426
+Test Acc: 0.5169029443838604, 0.8044347509996365
+
+Student train teacher passed.
+Teacher train student passed.
+
+======================== Task 3 ========================
+mask (300, 11) 3300 2474 0.816895715440582
+mask (300, 11) 3300 3082 0.7942894224529526
+mask (300, 11) 3300 3222 0.7827436374922409
+mask (300, 11) 3300 3265 0.7782542113323124
+Joint train passed.
+The task 0 result is following:
+The test shape is (917, 4).
+Test AUC: 0.8077652632479633
+Test Acc: 0.5354416575790621, 0.7968920392584514
+
+The task 1 result is following:
+The test shape is (917, 4).
+Test AUC: 0.4996074083830933
+Test Acc: 0.2529989094874591, 0.7164667393675027
+
+The task 2 result is following:
+The test shape is (917, 3).
+Test AUC: 0.45485760375733475
+Test Acc: 0.38276990185387133, 0.7760814249363868
+
+The task 3 result is following:
+The test shape is (917, 2).
+Test AUC: 0.7672421894929045
+Test Acc: 0.6292257360959651, 0.7988004362050164
+
+
+======================== Final Result ========================
+Until the task 0 result is following:
+The test shape is (917, 4).
+Test AUC: 0.8077652632479633
+Test Acc: 0.5354416575790621, 0.7968920392584514
+
+Until the task 1 result is following:
+The test shape is (917, 8).
+Test AUC: 0.7000403243898017
+Test Acc: 0.12758996728462377, 0.7566793893129771
+
+Until the task 2 result is following:
+The test shape is (917, 11).
+Test AUC: 0.6656141685913837
+Test Acc: 0.017448200654307525, 0.761970853573907
+
+Until the task 3 result is following:
+The test shape is (917, 13).
+Test AUC: 0.6752932004177302
+Test Acc: 0.010905125408942203, 0.7676369432094623
+
+904.4572243690491 s.
