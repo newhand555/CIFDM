@@ -266,11 +266,27 @@ def produce_pseudo_data(data, model, device, method='mask'):
             # print("The selected accuracy is", accuracy_score(selected_truth, selected_y), accuracy_score(selected_truth.reshape(-1), selected_y.reshape(-1))) # test selected performance
     return dataset
 
-def make_test(old_concate_model, new_concate_model, assist_model, test_data, device, infor, config):
-    # todo check details and modify usage
+def make_test(old_concate_model, new_concate_model, assist_model, test_data, device, method, config):
+    # todo make it to be a list
     label_index = [0]
     for l in config.label_list:
         label_index.append(l+label_index[-1])
+
+    if isinstance(method, int):
+        if method == -1:
+            s_idx = label_index[0]
+            e_idx = label_index[-1]
+        elif method >= 5:
+            s_idx = label_index[0]
+            e_idx = label_index[method-5+1]
+        else:
+            s_idx = label_index[method]
+            e_idx = label_index[method+1]
+    else:
+        s_idx = label_index[0]
+        e_idx = label_index[-1]
+        print("Error test method.")
+        exit()
 
     test_loader = DataLoader(test_data, batch_size=1, shuffle=False)
     old_concate_model.to(device).eval()
@@ -278,7 +294,6 @@ def make_test(old_concate_model, new_concate_model, assist_model, test_data, dev
     assist_model.to(device).eval()
 
     outputs = np.empty((0, old_concate_model.get_out_dim()+new_concate_model.get_out_dim()))
-    groud_truth = np.empty((0, test_data.data_y.shape[1]))
 
     for x, y in test_loader:
         x = x.to(device)
@@ -288,28 +303,20 @@ def make_test(old_concate_model, new_concate_model, assist_model, test_data, dev
         pred2 = new_concate_model(x, x2)
         pred = torch.cat([pred1, pred2], 1)
         outputs = np.concatenate([outputs, pred.cpu().detach().numpy()], 0)
-        groud_truth = np.concatenate([groud_truth, y.cpu().detach().numpy()], 0)
 
-    for idx in infor.task_list:
-        if infor.method == 'single':
-            s_idx = label_index[idx]
-            e_idx = label_index[idx + 1]
-        elif infor.method == 'incremental':
-            s_idx = label_index[0]
-            e_idx = label_index[idx + 1]
-        else:
-            print("Error in the function make_test.")
-            exit(1)
+        # print("+++", y.cpu().detach().numpy()[:, s_idx: e_idx])
+        # print("---", pred.cpu().detach().numpy().round()[:, s_idx: e_idx])
+        # print()
 
-        real_label = groud_truth[:, s_idx: e_idx]
-        pred_label = outputs[:, s_idx: e_idx]
+    real_label = np.array(test_data.data_y)[:, s_idx: e_idx]
+    pred_label = outputs[:, s_idx: e_idx]
+    # print("In the test, there are {} instances and each one has {} labels.".format(len(test_data), test_data.get_label_num()))
+    print("The test shape is {}.".format(real_label.shape))
+    print("Test AUC: {}".format(roc_auc_score(real_label, pred_label, average='micro')))
 
-        print("The test shape is {}.".format(real_label.shape))
-        print("Test AUC: {}".format(roc_auc_score(real_label, pred_label, average='micro')))
-
-        pred_label = np.array(pred_label) > 0.5
-        print("Test Acc: {}, {}".format(accuracy_score(real_label, pred_label),
-                                        accuracy_score(real_label.reshape(-1), pred_label.reshape(-1))))
+    pred_label = np.array(pred_label) > 0.5
+    print("Test Acc: {}, {}".format(accuracy_score(real_label, pred_label),
+                                    accuracy_score(real_label.reshape(-1), pred_label.reshape(-1))))
 
 def main():
     loss = label_correlation_loss(

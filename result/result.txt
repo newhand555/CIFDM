@@ -922,3 +922,150 @@ Test AUC: 0.6752932004177302
 Test Acc: 0.010905125408942203, 0.7676369432094623
 
 904.4572243690491 s.
+
+
+
+
+
+
+
+
+
+
+
+yigong@lambda-quad-4:~/PycharmProjects/CIFDM$ python3 main.py
+======================== Task 0 ========================
+Task 0 train Acc: 0.24255
+The task 0 result is following:
+The test shape is (107859, 30).
+Test AUC: 0.928419517300485
+Test Acc: 0.21456716639316145, 0.9499423630233298
+
+======================== Task 1 ========================
+mask (50000, 30) 1500000 56430 0.7977671451355662
+mask (50000, 30) 1500000 895448 0.9764118072741242
+mask (50000, 30) 1500000 1262194 0.9802558085365641
+mask (50000, 30) 1500000 1374514 0.9808041242213611
+Joint train passed.
+The task 0 result is following:
+The test shape is (107859, 30).
+Test AUC: 0.7824661518952204
+Test Acc: 0.3135111580860197, 0.9611641124060115
+
+The task 1 result is following:
+The test shape is (107859, 20).
+Test AUC: 0.8203871094599418
+Test Acc: 0.8043464152272874, 0.9892141592263974
+
+Student train teacher passed.
+Teacher train student passed.
+
+======================== Task 2 ========================
+mask (50000, 50) 2500000 2358128 0.9857183325078198
+mask (50000, 50) 2500000 2460864 0.9790447582637642
+mask (50000, 50) 2500000 2465678 0.9783820109519572
+mask (50000, 50) 2500000 2478154 0.9749192342364518
+Joint train passed.
+The task 0 result is following:
+The test shape is (107859, 30).
+Test AUC: 0.7111726784319428
+Test Acc: 0.28571561019479136, 0.9590573495644005
+
+The task 1 result is following:
+The test shape is (107859, 20).
+Test AUC: 0.5280679190960971
+Test Acc: 0.8094271224468983, 0.9895284584503843
+
+The task 2 result is following:
+The test shape is (107859, 15).
+Test AUC: 0.8374463743750256
+Test Acc: 0.7401793081708526, 0.9793032261254663
+
+
+======================== Final Result ========================
+Until the task 0 result is following:
+The test shape is (107859, 30).
+Test AUC: 0.7111726784319428
+Test Acc: 0.28571561019479136, 0.9590573495644005
+
+Until the task 1 result is following:
+The test shape is (107859, 50).
+Test AUC: 0.6837743132947565
+Test Acc: 0.23729127842831846, 0.971245793118794
+
+Until the task 2 result is following:
+The test shape is (107859, 65).
+Test AUC: 0.7002249843260187
+Test Acc: 0.2105341232535069, 0.9731052007357184
+
+62291.21188879013 s.
+
+
+
+
+/usr/bin/python3.8 /home/yigong/PycharmProjects/CIFDM/main.py
+======================== Task 0 ========================
+Task 0 train Acc: 0.014116666666666666
+The task 0 result is following:
+The test shape is (107859, 30).
+Test AUC: 0.9159633021653598
+Test Acc: 0.01370307531128603, 0.9192136647536753
+
+======================== Task 1 ========================
+mask (50000, 30) 1500000 109711 0.8334442307517022
+mask (50000, 30) 1500000 1303426 0.9425997333181938
+mask (50000, 30) 1500000 1431554 0.9333025509341597
+mask (50000, 30) 1500000 1451159 0.9280271837889577
+Joint train passed.
+The task 0 result is following:
+The test shape is (107859, 30).
+Test AUC: 0.8322006746825974
+Test Acc: 0.002790680425370159, 0.9108162817505571
+
+The task 1 result is following:
+The test shape is (107859, 20).
+Test AUC: 0.7698864041983013
+Test Acc: 0.8045411138616156, 0.9892178677718132
+
+Student train teacher passed.
+Teacher train student passed.
+
+======================== Task 2 ========================
+mask (50000, 50) 2500000 2376988 0.9560767660585582
+mask (50000, 50) 2500000 2424852 0.9416921115185587
+mask (50000, 50) 2500000 2456604 0.9318384241009133
+mask (50000, 50) 2500000 2497878 0.9204756997739681
+Joint train passed.
+The task 0 result is following:
+The test shape is (107859, 30).
+Test AUC: 0.8397154311224511
+Test Acc: 0.000472839540511223, 0.9066039922491401
+
+The task 1 result is following:
+The test shape is (107859, 20).
+Test AUC: 0.47512683472885764
+Test Acc: 0.029362408329393005, 0.9427094632807647
+
+The task 2 result is following:
+The test shape is (107859, 15).
+Test AUC: 0.8282072680481339
+Test Acc: 0.7410415449800202, 0.9794262262150895
+
+
+======================== Final Result ========================
+Until the task 0 result is following:
+The test shape is (107859, 30).
+Test AUC: 0.8397154311224511
+Test Acc: 0.000472839540511223, 0.9066039922491401
+
+Until the task 1 result is following:
+The test shape is (107859, 50).
+Test AUC: 0.7855440580181071
+Test Acc: 0.0, 0.9210461806617899
+
+Until the task 2 result is following:
+The test shape is (107859, 65).
+Test AUC: 0.7940116093278637
+Test Acc: 0.0, 0.9345184988663975
+
+96268.349142313 s.
