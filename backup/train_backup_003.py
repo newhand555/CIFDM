@@ -5,7 +5,7 @@ from sklearn.metrics import accuracy_score
 from dataset import data_select, StreamDataset, ParallelDataset
 import numpy as np
 from model import ConcatOldModel
-from tool import CorrelationMLSMLoss, produce_pseudo_data
+from tool import CorrelationMLSMLoss, test_train, produce_pseudo_data
 from tqdm import tqdm
 
 
@@ -29,7 +29,6 @@ def train_single(model, train_set, test_set, device, criterion, batch_size=1, ep
     # criterion = torch.nn.MSELoss().to(device)
 
     for e in range(epoch):
-
         for x, y in tqdm(train_loader):
             x = x.to(device)
             y = y.to(device)
@@ -39,7 +38,23 @@ def train_single(model, train_set, test_set, device, criterion, batch_size=1, ep
             loss.backward()
             optimizer.step()
 
+        # print("+++", y.cpu().detach().numpy())
+        # print("---", output.cpu().detach().numpy().round())
+        # print()
+        #
+        # print(e, loss, end=', ')
+        # test_train(model, None, None, test_set, train_set.task_id, device)
+
+        # if (e+1) % 20 == 0:
+        #     print(loss)
     model.eval()
+
+    for x, y in train_loader:
+        x = x.to(device)
+
+    if test_set is not None:
+        test_train(model, None, None, test_set, train_set.task_id, device)
+
 
 def train_joint(model_old, model_new, model_assist, train_set, test_set, device, config):
     '''

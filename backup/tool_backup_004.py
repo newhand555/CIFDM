@@ -169,6 +169,53 @@ def label_correlation_loss(pred, label):
 
     return loss_total
 
+def test_train(old_model, new_model, assist_model, dataset, task_id, device):
+    '''
+    Test traing set.
+    :param old_model:
+    :param new_model:
+    :param assist_model:
+    :param dataset:
+    :param task_id:
+    :param device:
+    :return:
+    '''
+    test_train_loader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=4)
+    pred_all = np.empty([0, dataset.data_y.shape[1]])
+
+    for x, y in test_train_loader:
+        x = x.to(device)
+        y = y.to(device)
+        pred1 = old_model(x)
+
+        if task_id != 0:
+            print(pred1.shape)
+            print(old_model.end.get_out_dim())
+            print(assist_model.get_io_dim())
+            x2 = assist_model(pred1)
+            pred2 = new_model(x, x2)
+            pred = torch.cat([pred1, pred2], 1)
+        else:
+            pred = pred1
+
+        # print("+++", y.cpu().detach().numpy())
+        # print("---", pred.cpu().detach().numpy().round())
+        # print()
+        pred = pred.cpu().detach().numpy() > 0.5
+        pred_all = np.concatenate([pred_all, pred], 0)
+
+    # for i in range(pred_all.shape[0]):
+    #     print("+++", dataset.data_y[i])
+    #     print("---", pred_all[i])
+    #     print()
+    # print("+++", dataset.data_y[-1])
+    # print("---", pred_all[-1])
+    # print()
+    # print(pred_all)
+    print("Task {} train Acc: {}".format(task_id, accuracy_score(dataset.data_y, pred_all)))
+    # print()
+    # print(pred_all.shape, dataset.data_y.shape)
+
 def produce_pseudo_data(data, model, device, method='mask'):
     model.eval()
     dataset = None

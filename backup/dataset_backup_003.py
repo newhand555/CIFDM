@@ -275,6 +275,42 @@ def load_dataset(shuffle, config):
     return train_list, test_train_list, test_list
 
 
+def calc_influence(original, train_set, test_set):
+    '''
+    No useful for now, ignore
+
+    :param original:
+    :param train_set:
+    :param test_set:
+    :return:
+    '''
+    if (len(train_set[0]) == 0) or (len(train_set[1]) == 0):
+        return np.random.permutation(len(train_set[0]) + len(train_set[1]))
+
+    data_x = []
+    data_y = []
+
+    for x in train_set[0]:
+        data_x.append(original[x])
+        data_y.append(-1)
+
+    for x in train_set[1]:
+        data_x.append(original[x])
+        data_y.append(1)
+
+    data_x = np.array(data_x)
+    data_y = np.array(data_y)
+
+    # todo logistic regression api
+    model = LogisticRegression()
+    model.fit(data_x, data_y)
+    theta = model.coef_
+
+    hessian = np.zeros((original.shape[1], original.shape[1]))
+
+    for i in range(len(train_set)):
+        pass
+
 def data_select_mask(data_y, confident=0.9):
     round0 = np.logical_and((confident-1) < data_y, data_y < (1-confident))
     round1 = np.logical_and(confident < data_y, data_y < (2-confident))
@@ -311,8 +347,69 @@ def data_select(data_x, data_y, select_num, confident=0.999):
         shuffled_i = np.random.permutation(len(in_data))[: select_num]
         return shuffled_i
 
+    in_label_list = []
+    out_label_list = []
+
+    for j in range(data_y.shape[1]):
+        temp0 = []
+        temp1 = []
+
+        for i in in_data:
+            if data_y[i][j] < 0.5:
+                temp0.append(i)
+            else:
+                temp1.append(i)
+
+        in_label_list.append([temp0, temp1])
+        temp0 = []
+        temp1 = []
+
+        for i in out_data:
+            if data_y[i][j] < 0.5:
+                temp0.append(i)
+            else:
+                temp1.append(i)
+
+        out_label_list.append([temp0, temp1])
+
+    print(in_label_list)
+    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+    print(out_label_list)
+
+    selected = []
+    for j in range(data_y.shape[1]):
+        influences = calc_influence(data_x, in_label_list[j], out_label_list[j])
+
+    selected = [i for i in range(len(data_x))]
+    return np.array(selected)
+
+
 def main():
-    pass
+    data_x = np.array(
+        [[1, 2, 3, 4, 5, 6],
+         [1.1, 2.3, 3.5, 4.2, 5.1, 6.9],
+         [1, 2, 6, 1, 4, 5],
+         [8, 4, -1, 4, 5.4, 1],
+         [6, 4, -1, 4, 5.4, 1],
+         [7, 4, -1, 4, 5.4, 1]]
+    )
+    data_y = np.array(
+        [[1, 0],
+         [0, 1],
+         [1, 1],
+         [0.55, 1],
+         [0.35, 1],
+         [0.45, 1]]
+    )
+    print(data_x.shape, data_y.shape)
+    data_select(data_x, data_y, 1)
+    return
+    train_list, test_list = load_dataset('yeast', 103, [6, 4, 4], [500, 500, 500], [300, 300, 300])
+    for ds in train_list:
+        print(ds.data_x.shape, ds.data_y.shape)
+    for ds in test_list:
+        print(ds.data_x.shape, ds.data_y.shape)
+
 
 if __name__ == '__main__':
     main()

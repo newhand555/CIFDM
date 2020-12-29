@@ -3,19 +3,22 @@ import copy
 from time import time
 import numpy as np
 import torch
+from sklearn.metrics import accuracy_score, roc_auc_score
 
 from configuration import Config
 from dataset import load_dataset
 from model import OldFrontModel, OldEndModel, NewFrontModel, NewEndModel, IntermediaModel, AssistModel, ConcatOldModel, \
     ConcatNewModel, TeacherFrontModel, TeacherEndModel, ConcatTeacherModel
-from tool import CorrelationMLSMLoss, init_weights, make_test, CorrelationMSELoss, TaskInfor
+from tool import CorrelationMLSMLoss, test_train, init_weights, make_test, CorrelationMSELoss, TaskInfor
 from train import train_single, train_joint, student_train_teacher, teacher_train_student
+from torch.utils.data import DataLoader
 
 
 def main(opt):
     config = Config(opt)
     device = torch.device('cuda:0')
     train_list, test_train_list, test_data = load_dataset(True, config)
+    test_train_flag = False
 
     old_front_model = OldFrontModel()
     old_end_model = OldEndModel(output=config.label_list[0])
@@ -40,12 +43,14 @@ def main(opt):
             # Task 0, only train old model as base.
             temp_criterion = CorrelationMSELoss()
             train_single(old_concate_model, train_list[i], test_train_list[i], device, temp_criterion, config.first_batch, config.first_epoch, 16)
+            if test_train_flag: test_train(old_concate_model, None, None, test_train_list[i], i, device)
             print("The task {} result is following:".format(0))
             infor = TaskInfor([0], 'single')
             make_test(old_concate_model, new_concate_model, assist_model, test_data, device, infor, config)
         else:
             # Other tasks need to adjust old model and train new model.
             train_joint(old_concate_model, new_concate_model, assist_model, train_list[i], None, device, config)
+            if test_train_flag: test_train(old_concate_model, new_concate_model, assist_model, test_train_list[i], i, device)
             task_list = []
 
             for j in range(i+1):
@@ -73,6 +78,11 @@ def main(opt):
 
     infor = TaskInfor(task_list, 'incremental')
     make_test(old_concate_model, new_concate_model, assist_model, test_data, device, infor, config)
+
+    # print("The overall result is following:")
+    # make_test(old_concate_model, new_concate_model, assist_model, test_data, device, -1, config)
+
+
 
 if __name__ == '__main__':
     time_start = time()
