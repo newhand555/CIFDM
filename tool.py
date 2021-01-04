@@ -70,34 +70,97 @@ class IntervalLoss(torch.nn.Module):
         return loss
 
 class CorrelationMSELoss(torch.nn.Module):
-    def __init__(self):
+    def __init__(self, device):
         super(CorrelationMSELoss, self).__init__()
         self.mse = torch.nn.MSELoss()
-        self.correlation = CorrelationLoss()
+        self.correlation = CorrelationLoss(device)
 
     def forward(self, pred, label):
         return self.mse(pred, label) + self.correlation(pred, label)
 
 class CorrelationMLSMLoss(torch.nn.Module):
-    def __init__(self):
+    def __init__(self, device):
         super(CorrelationMLSMLoss, self).__init__()
         self.mlsm = torch.nn.MultiLabelSoftMarginLoss()
-        self.correlation = CorrelationLoss()
+        self.correlation = CorrelationLoss(device)
 
     def forward(self, pred, label):
         return self.mlsm(pred, label) + self.correlation(pred, label)
 
 
 class CorrelationLoss(torch.nn.Module):
-    def __init__(self):
+    def __init__(self, device):
         super(CorrelationLoss, self).__init__()
+        self.device = device
 
     def forward(self, pred, label):
         if len(label.shape) == 1:
             pred = label.unsqueeze(0)
 
-        # pred = torch.sigmoid(pred)
+        n_one = torch.sum(label, 1)
+        n_zero = torch.ones(label.shape[0]).to(self.device) * label.shape[1]
+        n_zero -= n_one
+
+        result_matrix = torch.zeros(pred.shape).to(self.device)
+
+        temp_result = torch.exp(pred - 1)
+        temp_result = torch.transpose(temp_result, 1, 0)
+        temp_n = n_zero + (n_zero == 0).float()
+        temp_result = torch.div(temp_result, temp_n)
+        temp_mask = (n_one == 0).float()
+        temp_result = torch.mul(temp_result, temp_mask)
+        temp_result = torch.transpose(temp_result, 1, 0)
+        temp_result = torch.mul(temp_result, (1-label))
+        result_matrix += temp_result
+
+        # print(torch.sum(temp_result))
+
+        temp_result = torch.exp(-pred)
+        temp_result = torch.transpose(temp_result, 1, 0)
+        temp_n = n_one + (n_one == 0).float()
+        temp_result = torch.div(temp_result, temp_n)
+        temp_mask = (n_zero == 0).float()
+        temp_result = torch.mul(temp_result, temp_mask)
+        temp_result = torch.transpose(temp_result, 1, 0)
+        temp_result = torch.mul(temp_result, label)
+        result_matrix += temp_result
+
+        # print(torch.sum(temp_result))
+
+        temp_result = torch.transpose(torch.matmul(torch.ones([label.shape[1], 1]).to(self.device), torch.unsqueeze(pred, 1)), 1, 2)
+        temp_minus = torch.matmul(torch.ones([label.shape[1], 1]).to(self.device), torch.unsqueeze(pred, 1))
+        temp_result = torch.exp(temp_minus - temp_result) * torch.unsqueeze(1-label, 1)
+        temp_result = temp_result * torch.transpose(torch.unsqueeze(label, 1), 1, 2)
+        temp_result = torch.sum(temp_result, 2)
+        temp_result = torch.transpose(temp_result, 1, 0)
+        n_else = n_one * n_zero
+        temp_n = n_else + (n_else == 0).float()
+        temp_result = torch.div(temp_result, temp_n)
+        temp_mask = (n_else != 0).float()
+        temp_result = torch.mul(temp_result, temp_mask)
+        temp_result = torch.transpose(temp_result, 1, 0)
+        temp_result = torch.mul(temp_result, label)
+        result_matrix += temp_result
+
+        # print(torch.sum(temp_result))
+        #
+        # print(torch.sum(result_matrix))
+        # print(self.forward2(pred, label))
+
+        return torch.sum(result_matrix)
+
+
+
+
+
+    def forward2(self, pred, label):
+        if len(label.shape) == 1:
+            pred = label.unsqueeze(0)
+
         loss_total = 0
+        loss1 = 0
+        loss2 = 0
+        loss3 = 0
         for i in range(label.shape[0]):
             loss = 0
             n_one = int(torch.sum(label[i]))
@@ -109,20 +172,24 @@ class CorrelationLoss(torch.nn.Module):
                 for l in zero_index:
                     loss += torch.exp(pred[i][l] - 1)
                 loss /= n_zero
+                loss1 += loss
             elif n_zero == 0:
                 for l in nonzero_index:
                     loss += torch.exp(-pred[i][l])
                 loss /= n_one
+                loss2 += loss
             else:
                 for k in nonzero_index:
                     for l in zero_index:
                         loss += torch.exp(-(pred[i][k] - pred[i][l]))
+                        # print(torch.exp(-(pred[i][k] - pred[i][l])))
 
                 loss /= (n_one * n_zero)
+                loss3 += loss
 
             loss_total += loss
 
-        return loss_total
+        return loss_total, loss1, loss2, loss3
 
 def regularization_2(model):
     loss = 0
@@ -274,11 +341,11 @@ def make_test(old_concate_model, new_concate_model, assist_model, test_data, dev
         print()
 
 def main():
-    loss = label_correlation_loss(
-        torch.Tensor([[0, 1, 0], [1, 0, 1]]),
-        torch.Tensor([[0, 1, 0], [1, 0, 1]])
+    lossfunc = CorrelationLoss(torch.device('cpu'))
+    loss = lossfunc(
+        torch.Tensor([[0.1, 0.9, 0.3], [0.13, 0.87, 0.31]]),
+        torch.Tensor([[0, 0, 0], [1, 0, 1]])
     )
-    print(loss)
     return
 
 

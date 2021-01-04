@@ -38,7 +38,7 @@ def main(opt):
 
         if i == 0:
             # Task 0, only train old model as base.
-            temp_criterion = CorrelationMSELoss()
+            temp_criterion = CorrelationMSELoss(device)#torch.nn.MSELoss()#
             train_single(old_concate_model, train_list[i], test_train_list[i], device, temp_criterion, config.first_batch, config.first_epoch, 16)
             print("The task {} result is following:".format(0))
             infor = TaskInfor([0], 'single')
@@ -80,6 +80,7 @@ if __name__ == '__main__':
     parser.add_argument('--data', type=str, default=None)
     parser.add_argument('--log', type=str, default='/log/')
     opt = parser.parse_args()
+    torch.set_printoptions(profile="full")
 
     main(opt)
     print(time() - time_start, 's.')
