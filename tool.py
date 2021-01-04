@@ -13,17 +13,6 @@ def init_weights(w, m='kaiming'):
     else:
         return
 
-
-def correlation_plus_mse(pred, label, device):
-    mse = torch.nn.MSELoss().to(device)
-    loss = mse(pred, label) + label_correlation_loss(pred, label)
-    return loss
-
-def correlation_plus_MLSMLoss(pred, label, device):
-    MLSM = torch.nn.MultiLabelSoftMarginLoss().to(device)
-    loss = MLSM(pred, label) + label_correlation_loss(pred, label)
-    return loss
-
 class TaskInfor:
     def __init__(self, task_list, method):
         self.task_list = task_list
@@ -33,18 +22,6 @@ class IntervalLoss(torch.nn.Module):
     def __init__(self, loss_function):
         super(IntervalLoss, self).__init__()
         self.loss_function = loss_function()
-
-    # def forward(self, pred, label):
-    #     loss = torch.zeros(pred.shape, device=pred.device)
-    #     mask_round_one = torch.logical_and(0.8 < pred, pred < 1.2)
-    #     mask_round_zero = torch.logical_and(-0.2 < pred, pred < 0.2)
-    #     mask_one = torch.logical_and(label == 1, mask_round_zero)
-    #     mask_zero = torch.logical_and(label == 0, mask_round_one)
-    #     loss[mask_one] = torch.masked_select((1 / (torch.square(pred) * 50)) - 0.5, mask_one)
-    #     loss[mask_zero] = torch.masked_select((1 / (torch.square(pred-1) * 50)) - 0.5, mask_zero)
-    #     loss = loss.sum()
-    #     loss += self.loss_function(pred, label)
-    #     return loss
 
     def forward(self, pred, label):
         loss = torch.zeros(pred.shape, device=pred.device)
@@ -113,8 +90,6 @@ class CorrelationLoss(torch.nn.Module):
         temp_result = torch.mul(temp_result, (1-label))
         result_matrix += temp_result
 
-        # print(torch.sum(temp_result))
-
         temp_result = torch.exp(-pred)
         temp_result = torch.transpose(temp_result, 1, 0)
         temp_n = n_one + (n_one == 0).float()
@@ -124,8 +99,6 @@ class CorrelationLoss(torch.nn.Module):
         temp_result = torch.transpose(temp_result, 1, 0)
         temp_result = torch.mul(temp_result, label)
         result_matrix += temp_result
-
-        # print(torch.sum(temp_result))
 
         temp_result = torch.transpose(torch.matmul(torch.ones([label.shape[1], 1]).to(self.device), torch.unsqueeze(pred, 1)), 1, 2)
         temp_minus = torch.matmul(torch.ones([label.shape[1], 1]).to(self.device), torch.unsqueeze(pred, 1))
@@ -142,99 +115,7 @@ class CorrelationLoss(torch.nn.Module):
         temp_result = torch.mul(temp_result, label)
         result_matrix += temp_result
 
-        # print(torch.sum(temp_result))
-        #
-        # print(torch.sum(result_matrix))
-        # print(self.forward2(pred, label))
-
         return torch.sum(result_matrix)
-
-
-
-
-
-    def forward2(self, pred, label):
-        if len(label.shape) == 1:
-            pred = label.unsqueeze(0)
-
-        loss_total = 0
-        loss1 = 0
-        loss2 = 0
-        loss3 = 0
-        for i in range(label.shape[0]):
-            loss = 0
-            n_one = int(torch.sum(label[i]))
-            n_zero = label.shape[1] - n_one
-            zero_index = torch.nonzero(label[i] == 0, as_tuple=False).reshape(-1)
-            nonzero_index = torch.nonzero(label[i] > 0, as_tuple=False).reshape(-1)
-
-            if n_one == 0:
-                for l in zero_index:
-                    loss += torch.exp(pred[i][l] - 1)
-                loss /= n_zero
-                loss1 += loss
-            elif n_zero == 0:
-                for l in nonzero_index:
-                    loss += torch.exp(-pred[i][l])
-                loss /= n_one
-                loss2 += loss
-            else:
-                for k in nonzero_index:
-                    for l in zero_index:
-                        loss += torch.exp(-(pred[i][k] - pred[i][l]))
-                        # print(torch.exp(-(pred[i][k] - pred[i][l])))
-
-                loss /= (n_one * n_zero)
-                loss3 += loss
-
-            loss_total += loss
-
-        return loss_total, loss1, loss2, loss3
-
-def regularization_2(model):
-    loss = 0
-    for param in model.parameters():
-        pass
-
-def label_correlation_loss(pred, label):
-    '''
-    Same with class CorrelationLoss.
-    :param pred:
-    :param label:
-    :return:
-    '''
-    if len(label.shape) == 1:
-        pred = label.unsqueeze(0)
-        pred = label.unsqueeze(0)
-
-    # pred = torch.sigmoid(pred)
-    loss_total = 0
-
-    for i in range(label.shape[0]):
-        loss = 0
-        n_one = int(torch.sum(label[i]))
-        n_zero = label.shape[1] - n_one
-        zero_index = torch.nonzero(label[i] == 0, as_tuple=False).reshape(-1)
-        nonzero_index = torch.nonzero(label[i] > 0, as_tuple=False).reshape(-1)
-        if n_one == 0:
-            for l in zero_index:
-                loss += torch.exp(pred[i][l] - 1)
-
-            loss /= n_zero
-        elif n_zero == 0:
-            for l in nonzero_index:
-                loss += torch.exp(-pred[i][l])
-
-            loss /= n_one
-        else:
-            for k in nonzero_index:
-                for l in zero_index:
-                    loss += torch.exp(-(pred[i][k] - pred[i][l]))
-
-            loss /= (n_one * n_zero)
-        loss_total += loss
-
-    return loss_total
 
 def produce_pseudo_data(data, model, device, method='mask'):
     model.eval()

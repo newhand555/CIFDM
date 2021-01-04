@@ -29,3 +29,5 @@ a = torch.unsqueeze(a, 1)
 print(a, w)
 # print(torch.matmul(w, b))
 print(torch.matmul(w, a))
+c = 1
+print(-c, -c>0)

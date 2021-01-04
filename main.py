@@ -14,7 +14,7 @@ from train import train_single, train_joint, student_train_teacher, teacher_trai
 
 def main(opt):
     config = Config(opt)
-    device = torch.device('cuda:0')
+    device = torch.device('cuda:1')
     train_list, test_train_list, test_data = load_dataset(True, config)
 
     old_front_model = OldFrontModel()

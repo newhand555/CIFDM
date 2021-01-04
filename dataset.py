@@ -9,7 +9,8 @@ class StreamDataset(Dataset):
     '''
     A standard dataset format for a given task.
     '''
-    def __init__(self, data_x, data_y, task_id, transform=None, all_y = None):
+
+    def __init__(self, data_x, data_y, task_id, transform=None, all_y=None):
         self.data_x = data_x
         self.data_y = data_y
         self.task_id = task_id
@@ -40,6 +41,7 @@ class ParallelDataset(Dataset):
     '''
     A dataset format that contains two inputs.
     '''
+
     def __init__(self, data_x, data_x2, data_y, task_id, transform=None):
         self.data_x = data_x
         self.data_x2 = data_x2
@@ -72,6 +74,7 @@ class TestDataset(Dataset):
     '''
     A dataset format for test.
     '''
+
     def __init__(self, data_x, data_y, transform=None):
         self.data_x = data_x
         self.data_y = data_y
@@ -93,10 +96,12 @@ class TestDataset(Dataset):
 
         return x, y
 
+
 class TestDatasetOld(Dataset):
     '''
     A dataset format for test.
     '''
+
     def __init__(self, data_x, data_y_dict, transform=None):
         self.data_x = data_x
         self.data_y_dict = data_y_dict
@@ -128,6 +133,7 @@ class TestDatasetOld(Dataset):
 
         return x, y
 
+
 def make_data_dict(data, attri_num, label_list, from_head):
     '''
     Assign labels to each task.
@@ -139,14 +145,16 @@ def make_data_dict(data, attri_num, label_list, from_head):
     :return: A dictionary that key is task id and returns specific labels for that task.
     '''
     data_dict = {}
-    data_dict[-1] = data[:, :attri_num] # -1 means it contains features rather than labels.
+    data_dict[-1] = data[:, :attri_num]  # -1 means it contains features rather than labels.
     rest_index = attri_num
 
     for i in range(len(label_list)):
         if from_head:
-            data_dict[i] = data[:, attri_num: rest_index + label_list[i]] # Current task labels also contain previous labels.
+            data_dict[i] = data[:,
+                           attri_num: rest_index + label_list[i]]  # Current task labels also contain previous labels.
         else:
-            data_dict[i] = data[:, rest_index: rest_index + label_list[i]] # Current task labels do not contain previous labels.
+            data_dict[i] = data[:, rest_index: rest_index + label_list[
+                i]]  # Current task labels do not contain previous labels.
 
         rest_index += label_list[i]
 
@@ -192,7 +200,7 @@ def make_test_dataset(data, attri_num, label_list):
     :return: A dictionary that key is task id and returns specific labels for that task.
     '''
     data_x = data[: 16, : attri_num]
-    data_y = data[: 16, attri_num:] # -1 means it contains all labels.
+    data_y = data[: 16, attri_num:]  # -1 means it contains all labels.
     data_test = TestDataset(data_x, data_y, None)
 
     return data_test
@@ -268,20 +276,23 @@ def load_dataset(shuffle, config):
         temp_y = temp_y[:, shuffled_indices]
         test_data = np.concatenate([temp_x, temp_y], 1)
 
-    train_list = make_train_dataset_list(train_data, config.attri_num, config.label_list, config.train_instance_list, False)
-    test_train_list = make_train_dataset_list(train_data, config.attri_num, config.label_list, config.train_instance_list, True)
+    train_list = make_train_dataset_list(train_data, config.attri_num, config.label_list, config.train_instance_list,
+                                         False)
+    test_train_list = make_train_dataset_list(train_data, config.attri_num, config.label_list,
+                                              config.train_instance_list, True)
     test_list = make_test_dataset(test_data, config.attri_num, config.label_list)
 
     return train_list, test_train_list, test_list
 
 
-def data_select_mask(data_y, confident=0.9):
-    round0 = np.logical_and((confident-1) < data_y, data_y < (1-confident))
-    round1 = np.logical_and(confident < data_y, data_y < (2-confident))
+def data_select_mask(data_y, ci0=0.1, ci1=0.3):
+    round0 = np.logical_and(-ci0 < data_y, data_y < ci0)
+    round1 = np.logical_and((1 - ci1) < data_y, data_y < (1 + ci1))
     psedu = np.logical_or(round0, round1).astype(int)
     return psedu
 
-def data_select(data_x, data_y, select_num, confident=0.999):
+
+def data_select(data_x, data_y, select_num, ci0=0.1, ci1=0.3):
     '''
     Select useful and trustable instances for SSL.
 
@@ -296,14 +307,14 @@ def data_select(data_x, data_y, select_num, confident=0.999):
 
     for i in range(data_y.shape[0]):
         for y in data_y[i]:
-            if ((1 - confident) < y < confident) or (y < (confident - 1)) or (y > (2 - confident)):
+            if (ci0 < y < (1 - ci1)) or (y < (-ci0)) or (y > (1 + ci1)):
                 out_data.append(i)
                 break
         else:  # this else is for break for
             # print(data_y[i].round(4))
             in_data.append(i)
 
-    if (select_num == -1) or (len(in_data) == 0): # Currently it will return here, ignore the rest part.
+    if (select_num == -1) or (len(in_data) == 0):  # Currently it will return here, ignore the rest part.
         print("There are {} instances that can be trusted.".format(len(in_data)))
         return np.array(in_data)
 
@@ -311,8 +322,10 @@ def data_select(data_x, data_y, select_num, confident=0.999):
         shuffled_i = np.random.permutation(len(in_data))[: select_num]
         return shuffled_i
 
+
 def main():
     pass
+
 
 if __name__ == '__main__':
     main()

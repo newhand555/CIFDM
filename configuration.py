@@ -5,8 +5,8 @@ class Config:
 
         self.data_name = 'nuswide'#'yeast'
         self.attri_num = 128 # 128
-        self.label_list = [65, 1]#[6, 5, 3] # [30, 20, 15] [14] [7, 6] [4, 4, 3, 2]
-        self.train_instance_list = [160000, 1]#[500, 500, 500] # [1500] [800, 700] [400, 400, 400, 300] [60000, 50000, 50000]
+        self.label_list = [30, 20, 15]#[6, 5, 3] #  [14] [7, 6] [4, 4, 3, 2]
+        self.train_instance_list = [60000, 50000, 50000]#[500, 500, 500] # [1500] [800, 700] [400, 400, 400, 300]
         # self.test_instance_list = [450, 450] # [900] [250, 250, 250, 150] [300, 300, 300]
         self.task_num = len(self.label_list)
 

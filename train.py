@@ -28,9 +28,9 @@ def train_single(model, train_set, test_set, device, criterion, batch_size=1, ep
     optimizer = torch.optim.Adam(model.parameters(), weight_decay=1e-07)
     # criterion = torch.nn.MSELoss().to(device)
 
-    for e in range(epoch):
+    for e in tqdm(range(epoch), desc="Train single mode Epoch"):
 
-        for x, y in tqdm(train_loader):
+        for x, y in tqdm(train_loader, desc="Train single mode Batch", leave=False):
             x = x.to(device)
             y = y.to(device)
             optimizer.zero_grad()
@@ -94,7 +94,7 @@ def train_joint(model_old, model_new, model_assist, train_set, test_set, device,
 
         data_x = np.array(data_x)
         dataset_assist = StreamDataset(data_x, train_set.data_y, train_set.task_id, None)
-        temp_criterion = CorrelationMLSMLoss()
+        temp_criterion = CorrelationMLSMLoss(device)
         # train assistant model once.
         train_single(model_assist, dataset_assist, None, device, temp_criterion, 8, 1, config.num_workers)  # must be 1
 
