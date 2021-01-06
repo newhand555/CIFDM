@@ -134,13 +134,16 @@ def produce_pseudo_data(data, model, device, method='mask'):
 
         preds = []
         reals = []
+        counter = 0
         for i in range(mask.shape[0]):
             for j in range(mask.shape[1]):
                 if mask[i][j] == 1:
                     preds.append(data_y[i][j].round())
                     temp = data.all_y[i]
                     reals.append(temp[j])
-        print('mask', mask.shape, mask.shape[1]*mask.shape[0], np.sum(mask), accuracy_score(np.array(reals), np.array(preds)))
+                    if temp[j] == 1:
+                        counter+=1
+        print('mask', mask.shape, mask.shape[1]*mask.shape[0], np.sum(mask), counter/np.sum(mask), '%', "Acc", accuracy_score(np.array(reals), np.array(preds)), "Prec", precision_score(np.array(reals), np.array(preds)), "Recall", recall_score(np.array(reals), np.array(preds)))
 
     else:
         selected = data_select(data.data_x, data_y, -1)  # use inter or final to find suitable samples
@@ -173,7 +176,7 @@ def make_test(old_concate_model, new_concate_model, assist_model, test_data, dev
     for l in config.label_list:
         label_index.append(l+label_index[-1])
 
-    test_loader = DataLoader(test_data, batch_size=1, shuffle=False, num_workers=4)
+    test_loader = DataLoader(test_data, batch_size=128, shuffle=False, num_workers=4)
     old_concate_model.to(device).eval()
     new_concate_model.to(device).eval()
     assist_model.to(device).eval()
@@ -217,6 +220,7 @@ def make_test(old_concate_model, new_concate_model, assist_model, test_data, dev
         pred_label = np.array(pred_label) > 0.5
         print("Test Accuracy: {}, {}".format(accuracy_score(real_label, pred_label),
                                         accuracy_score(real_label.reshape(-1), pred_label.reshape(-1))))
+        # print("Test AUC: {}".format(roc_auc_score(real_label.reshape(-1), pred_label.reshape(-1))))
         print("Test Precision: {}".format(precision_score(real_label.reshape(-1), pred_label.reshape(-1))))
         print("Test Recall: {}".format(recall_score(real_label.reshape(-1), pred_label.reshape(-1))))
         print()

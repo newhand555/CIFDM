@@ -14,8 +14,10 @@ from train import train_single, train_joint, student_train_teacher, teacher_trai
 
 def main(opt):
     config = Config(opt)
-    device = torch.device('cuda:1')
+    device = torch.device('cuda:2')
     train_list, test_train_list, test_data = load_dataset(True, config)
+
+    print(test_data.data_y.shape)
 
     old_front_model = OldFrontModel()
     old_end_model = OldEndModel(output=config.label_list[0])

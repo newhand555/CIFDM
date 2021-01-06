@@ -5,7 +5,7 @@ from sklearn.metrics import accuracy_score
 from dataset import data_select, StreamDataset, ParallelDataset
 import numpy as np
 from model import ConcatOldModel
-from tool import CorrelationMLSMLoss, produce_pseudo_data
+from tool import CorrelationMLSMLoss, produce_pseudo_data, CorrelationMSELoss
 from tqdm import tqdm
 
 
@@ -21,7 +21,6 @@ def train_single(model, train_set, test_set, device, criterion, batch_size=1, ep
     :return: None
     '''
     train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=False, num_workers=nw)
-    print(batch_size)
     model.to(device)
     model.train()
 
@@ -62,7 +61,7 @@ def train_joint(model_old, model_new, model_assist, train_set, test_set, device,
     model_old.to(device)
     model_new.to(device)
     optimizer_new = torch.optim.Adam(model_new.parameters(), 0.001)
-    criterion_new = torch.nn.MSELoss().to(device)
+    criterion_new = CorrelationMSELoss(device) # torch.nn.MSELoss().to(device)
 
     # todo there are two ways: 1. train one by one. 2. train mixed.
     for e in range(config.joint_epoch):
@@ -77,9 +76,9 @@ def train_joint(model_old, model_new, model_assist, train_set, test_set, device,
                 for x, m, y in loader_old:
                     x = x.to(device)
                     m = m.to(device)
-                    y = torch.mul(y.to(device), m)
                     optimizer_old.zero_grad()
-                    output = torch.mul(model_old(x), m)
+                    output = model_old(x) # torch.mul(model_old(x), m)
+                    y = torch.mul(y.to(device), m) + torch.mul(output, (1-m))
                     loss = criterion(output, y)
                     loss.backward()
                     optimizer_old.step()

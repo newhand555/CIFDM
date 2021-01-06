@@ -33,6 +33,7 @@ class OldEndModel(nn.Module):
         )
 
     def modify_out_layer(self, output):
+        out_dict = self.out_layer.state_dict()
         self.out_dim = output
         self.out_layer = nn.Sequential(
             nn.Linear(16, output, bias=True),
@@ -226,3 +227,16 @@ class MyActivation(nn.Module):
         #     return x
         # else:
         #     return 0.5 * (x ** 2) + 0.5
+
+def main():
+    oldend = OldEndModel(24)
+    print(oldend.out_layer.parameters())
+    for p in oldend.out_layer.parameters():
+        print(p.shape)
+
+    net_dict = oldend.state_dict()
+    print(net_dict.keys())
+    print(net_dict['out_layer.0.weight'])
+
+if __name__ == '__main__':
+    main()

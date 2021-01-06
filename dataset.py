@@ -199,8 +199,8 @@ def make_test_dataset(data, attri_num, label_list):
     :param instance_list: An array how many instances are assigned to each task.
     :return: A dictionary that key is task id and returns specific labels for that task.
     '''
-    data_x = data[: 16, : attri_num]
-    data_y = data[: 16, attri_num:]  # -1 means it contains all labels.
+    data_x = data[: , : attri_num]
+    data_y = data[: , attri_num:]  # -1 means it contains all labels.
     data_test = TestDataset(data_x, data_y, None)
 
     return data_test
@@ -285,7 +285,7 @@ def load_dataset(shuffle, config):
     return train_list, test_train_list, test_list
 
 
-def data_select_mask(data_y, ci0=0.1, ci1=0.3):
+def data_select_mask(data_y, ci0=0.1, ci1=0.2):
     round0 = np.logical_and(-ci0 < data_y, data_y < ci0)
     round1 = np.logical_and((1 - ci1) < data_y, data_y < (1 + ci1))
     psedu = np.logical_or(round0, round1).astype(int)
