@@ -55,6 +55,31 @@ class CorrelationMSELoss(torch.nn.Module):
     def forward(self, pred, label):
         return self.mse(pred, label) + self.correlation(pred, label)
 
+class WeightCorrelationMSELoss(torch.nn.Module):
+    def __init__(self, device, weight=1):
+        super(WeightCorrelationMSELoss, self).__init__()
+
+        if weight == 1:
+            self.mse = torch.nn.MSELoss()
+        else:
+            self.mse = WeightMSELoss(device, weight)
+
+        self.correlation = CorrelationLoss(device, weight)
+
+    def forward(self, pred, label):
+        return self.mse(pred, label) + self.correlation(pred, label)
+
+class WeightMSELoss(torch.nn.Module):
+    def __init__(self, device, weight=1):
+        super(WeightMSELoss, self).__init__()
+        self.device = device
+        self.weight = weight
+
+    def forward(self, pred, label):
+        loss_matrix = (pred - label) ** 2
+        loss_matrix *= ((self.weight - 1) * label) + 1
+        return torch.sum(loss_matrix)
+
 class CorrelationMLSMLoss(torch.nn.Module):
     def __init__(self, device):
         super(CorrelationMLSMLoss, self).__init__()
@@ -66,9 +91,10 @@ class CorrelationMLSMLoss(torch.nn.Module):
 
 
 class CorrelationLoss(torch.nn.Module):
-    def __init__(self, device):
+    def __init__(self, device, weight=1):
         super(CorrelationLoss, self).__init__()
         self.device = device
+        self.weight = weight
 
     def forward(self, pred, label):
         if len(label.shape) == 1:
@@ -115,6 +141,8 @@ class CorrelationLoss(torch.nn.Module):
         temp_result = torch.mul(temp_result, label)
         result_matrix += temp_result
 
+        result_matrix *= ((self.weight - 1) * label) + 1
+
         return torch.sum(result_matrix)
 
 def produce_pseudo_data(data, model, device, method='mask'):
@@ -124,8 +152,8 @@ def produce_pseudo_data(data, model, device, method='mask'):
 
     # Get the predictions of the old model to be the psudo labels.
     for x in data.data_x:
-        x = torch.Tensor(x).to(device)
-        data_y.append(model(x).cpu().detach().numpy())
+        x = torch.Tensor(x).to(device).unsqueeze(0)
+        data_y.append(model(x).squeeze(0).cpu().detach().numpy())
 
     data_y = np.array(data_y)
     if method == 'mask':
@@ -227,6 +255,11 @@ def make_test(old_concate_model, new_concate_model, assist_model, test_data, dev
 
 def main():
     lossfunc = CorrelationLoss(torch.device('cpu'))
+    loss = lossfunc(
+        torch.Tensor([[0.1, 0.9, 0.3], [0.13, 0.87, 0.31]]),
+        torch.Tensor([[0, 0, 0], [1, 0, 1]])
+    )
+    lossfunc = WeightMSELoss(torch.device('cpu'))
     loss = lossfunc(
         torch.Tensor([[0.1, 0.9, 0.3], [0.13, 0.87, 0.31]]),
         torch.Tensor([[0, 0, 0], [1, 0, 1]])
