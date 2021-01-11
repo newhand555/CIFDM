@@ -148,14 +148,16 @@ class CorrelationLoss(torch.nn.Module):
 def produce_pseudo_data(data, model, device, method='mask'):
     model.eval()
     dataset = None
-    data_y = []
+    data_y = torch.empty([0, model.get_out_dim()]).to(device)
+    temp_loader = DataLoader(data, batch_size=256, shuffle=False, num_workers=24)
 
     # Get the predictions of the old model to be the psudo labels.
-    for x in data.data_x:
-        x = torch.Tensor(x).to(device).unsqueeze(0)
-        data_y.append(model(x).squeeze(0).cpu().detach().numpy())
+    for x, _ in temp_loader:
+        x = x.to(device)
+        data_y = torch.cat([data_y, model(x)], 0)
 
-    data_y = np.array(data_y)
+    data_y = data_y.cpu().detach().numpy()
+
     if method == 'mask':
         mask = data_select_mask(data_y)
         dataset = ParallelDataset(data.data_x, mask, data_y.round(), data.task_id, None) if np.sum(mask) != 0 else None
@@ -204,7 +206,7 @@ def make_test(old_concate_model, new_concate_model, assist_model, test_data, dev
     for l in config.label_list:
         label_index.append(l+label_index[-1])
 
-    test_loader = DataLoader(test_data, batch_size=128, shuffle=False, num_workers=4)
+    test_loader = DataLoader(test_data, batch_size=config.eval_batch, shuffle=False, num_workers=4)
     old_concate_model.to(device).eval()
     new_concate_model.to(device).eval()
     assist_model.to(device).eval()

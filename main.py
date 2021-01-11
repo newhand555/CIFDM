@@ -19,11 +19,11 @@ def main(opt):
 
     print(test_data.data_y.shape)
 
-    old_front_model = OldFrontModel()
-    old_end_model = OldEndModel(output=config.label_list[0])
-    new_front_model = NewFrontModel()
-    new_end_model = NewEndModel(output=config.label_list[1])
-    intermedia_model = IntermediaModel()
+    old_front_model = OldFrontModel(config.attri_num, config.embed_dim)
+    old_end_model = OldEndModel(config.embed_dim, config.label_list[0])
+    new_front_model = NewFrontModel(config.attri_num, config.embed_dim)
+    new_end_model = NewEndModel(config.embed_dim, config.label_list[1])
+    intermedia_model = IntermediaModel(config.embed_dim * 2, config.embed_dim)
     assist_model = AssistModel(config.label_list[0], config.label_list[1])
     old_concate_model = ConcatOldModel(old_front_model, old_end_model)
     new_concate_model = ConcatNewModel(new_front_model, new_end_model)

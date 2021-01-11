@@ -3,10 +3,12 @@ import configuration
 from torch import nn
 
 class OldFrontModel(nn.Module):
-    def __init__(self):
+    def __init__(self, in_dim, out_dim):
         super(OldFrontModel, self).__init__()
+        self.in_dim = in_dim
+        self.out_dim = out_dim
         self.layers = nn.Sequential(
-            nn.Linear(128, 128, True),
+            nn.Linear(self.in_dim, 128, True),
             nn.Dropout(0.2, inplace=False),
             nn.ReLU(),
             nn.BatchNorm1d(128),
@@ -26,25 +28,27 @@ class OldFrontModel(nn.Module):
             nn.Dropout(0.2, inplace=False),
             nn.ReLU(),
             nn.BatchNorm1d(128),
-            nn.Linear(128, 64, True),
+            nn.Linear(128, self.out_dim, True),
             nn.Dropout(0.2, inplace=False),
             nn.ReLU(),
-            nn.BatchNorm1d(64),
+            nn.BatchNorm1d(self.out_dim),
         )
-        self.a = nn.BatchNorm1d(128)
 
     def forward(self, x):
-        x = self.a(x)
         x = self.layers(x)
         return x
 
+    def get_out_dim(self):
+        return self.out_dim
+
 
 class OldEndModel(nn.Module):
-    def __init__(self, output):
+    def __init__(self, in_dim, out_dim):
         super(OldEndModel, self).__init__()
-        self.out_dim = output
+        self.in_dim = in_dim
+        self.out_dim = out_dim
         self.layers = nn.Sequential(
-            nn.Linear(64, 128, True),
+            nn.Linear(self.in_dim, 128, True),
             nn.Dropout(0.2, inplace=False),
             nn.ReLU(),
             nn.BatchNorm1d(128),
@@ -54,7 +58,7 @@ class OldEndModel(nn.Module):
             nn.BatchNorm1d(128),
         )
         self.out_layer = nn.Sequential(
-            nn.Linear(128, output, bias=True),
+            nn.Linear(128, out_dim, bias=True),
             MyActivation()
         )
 
@@ -76,10 +80,12 @@ class OldEndModel(nn.Module):
 
 
 class NewFrontModel(nn.Module):
-    def __init__(self):
+    def __init__(self, in_dim, out_dim):
         super(NewFrontModel, self).__init__()
+        self.in_dim = in_dim
+        self.out_dim = out_dim
         self.layers = nn.Sequential(
-            nn.Linear(128, 256, True),
+            nn.Linear(self.in_dim, 256, True),
             nn.Dropout(0.2, inplace=False),
             nn.ReLU(),
             nn.BatchNorm1d(256),
@@ -87,29 +93,33 @@ class NewFrontModel(nn.Module):
             nn.Dropout(0.2, inplace=False),
             nn.ReLU(),
             nn.BatchNorm1d(128),
-            nn.Linear(128, 64, True),
+            nn.Linear(128, self.out_dim, True),
             nn.Dropout(0.2, inplace=False),
             nn.ReLU(),
-            nn.BatchNorm1d(64),
+            nn.BatchNorm1d(self.out_dim),
         )
 
     def forward(self, x):
         x = self.layers(x)
         return x
 
+    def get_out_dim(self):
+        return self.out_dim
+
 
 class NewEndModel(nn.Module):
-    def __init__(self, output):
+    def __init__(self, in_dim, out_dim):
         super(NewEndModel, self).__init__()
-        self.out_dim = output
+        self.in_dim = in_dim
+        self.out_dim = out_dim
         self.layers = nn.Sequential(
-            nn.Linear(64, 128, bias=True),
+            nn.Linear(self.in_dim, 128, bias=True),
             nn.Dropout(0.2, inplace=False),
             nn.ReLU(),
             nn.BatchNorm1d(128),
         )
         self.out_layer = nn.Sequential(
-            nn.Linear(128 + output, output, bias=True),
+            nn.Linear(128 + self.out_dim, self.out_dim, bias=True),
             MyActivation()
         )
 
@@ -131,12 +141,14 @@ class NewEndModel(nn.Module):
 
 
 class IntermediaModel(nn.Module):
-    def __init__(self):
+    def __init__(self, in_dim, out_dim):
         super(IntermediaModel, self).__init__()
+        self.in_dim = in_dim
+        self.out_dim = out_dim
         self.layers = nn.Sequential(
-            nn.Linear(128, 64, bias=True),
+            nn.Linear(self.in_dim, self.out_dim, bias=True),
             nn.ReLU(),
-            nn.BatchNorm1d(64),
+            nn.BatchNorm1d(self.out_dim),
         )
 
     def forward(self, x1, x2):
@@ -144,15 +156,17 @@ class IntermediaModel(nn.Module):
         y = self.layers(x)
         return y
 
+    def get_out_dim(self):
+        return self.out_dim
 
 # todo assist input output modify
 class AssistModel(nn.Module):
-    def __init__(self, input, output):
+    def __init__(self, in_dim, out_dim):
         super(AssistModel, self).__init__()
-        self.in_dim = input
-        self.out_dim = output
+        self.in_dim = in_dim
+        self.out_dim = out_dim
         self.layers = nn.Sequential(
-            nn.Linear(input, output, bias=True),
+            nn.Linear(self.in_dim, self.out_dim, bias=True),
             nn.Sigmoid()
         )
 
@@ -160,7 +174,7 @@ class AssistModel(nn.Module):
         self.in_dim = input
         self.out_dim = output
         self.layers = nn.Sequential(
-            nn.Linear(input, output, bias=True),
+            nn.Linear(self.in_dim, self.out_dim, bias=True),
             nn.Sigmoid()
         )
 
@@ -183,6 +197,9 @@ class TeacherFrontModel(nn.Module):
         x2 = self.new(x)
         y = self.inter(x1, x2)
         return y
+
+    def get_out_dim(self):
+        return self.inter.get_out_dim()
 
 
 class TeacherEndModel(nn.Module):
@@ -266,7 +283,7 @@ class MyActivation(nn.Module):
         #     return 0.5 * (x ** 2) + 0.5
 
 def main():
-    oldend = OldEndModel(24)
+    oldend = OldEndModel(24, 1)
     print(oldend.out_layer.parameters())
     for p in oldend.out_layer.parameters():
         print(p.shape)

@@ -31,3 +31,11 @@ print(a, w)
 print(torch.matmul(w, a))
 c = 1
 print(-c, -c>0)
+
+e = 3
+d = torch.empty([0, e])
+print(a.shape)
+print(a.squeeze(0).shape)
+print(d)
+d = torch.cat([d, a.squeeze(1)], 0)
+print(d.shape)

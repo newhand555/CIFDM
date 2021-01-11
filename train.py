@@ -84,15 +84,18 @@ def train_joint(model_old, model_new, model_assist, train_set, test_set, device,
                     optimizer_old.step()
 
         model_old.eval()
-        data_x = []
+        temp_loader = DataLoader(train_set, batch_size=config.eval_batch, shuffle=False, num_workers=24)
+        data_x = torch.empty([0,model_old.get_out_dim()]).to(device)
 
         # Get outputs of old model to be the inputs of assistant model.
-        for x in train_set.data_x:
-            x = torch.Tensor(x).to(device).unsqueeze(0)
-            data_x.append(model_old(x).squeeze(0).cpu().detach().numpy())
+        for x, _ in temp_loader:
+            x = x.to(device)
+            data_x = torch.cat([data_x, model_old(x)], 0)
 
-        data_x = np.array(data_x)
+        data_x = data_x.cpu().detach().numpy()
+
         dataset_assist = StreamDataset(data_x, train_set.data_y, train_set.task_id, None)
+
         # temp_criterion = CorrelationMLSMLoss(device)
         temp_criterion = WeightCorrelationMSELoss(device, config.weight)
         # train assistant model once.
@@ -151,15 +154,22 @@ def teacher_train_student(teacher_model, old_model, new_model, train_set, device
     data_inter = []
     data_y = []
 
+    data_inter = torch.empty([0, teacher_front.get_out_dim()]).to(device)
+    data_y = torch.empty([0, teacher_end.get_out_dim()]).to(device)
+    temp_loader = DataLoader(train_set, batch_size=config.eval_batch, shuffle=False, num_workers=24)
+
     teacher_front.eval()
 
     # Get intermedia outputs and final outputs of teacher model as targets.
-    for x in train_set.data_x:
-        x = torch.Tensor(x).to(device)
-        inter = teacher_front(x.unsqueeze(0))
+    for x, _ in temp_loader:
+        x = x.to(device)
+        inter = teacher_front(x)
         y = teacher_end(inter)
-        data_inter.append(inter.squeeze(0).cpu().detach().numpy())
-        data_y.append(y.squeeze(0).cpu().detach().numpy())
+        data_inter = torch.cat([data_inter, inter], 0)
+        data_y = torch.cat([data_y, y], 0)
+
+    data_inter = data_inter.cpu().detach().numpy()
+    data_y = data_y.cpu().detach().numpy()
 
     # todo use teacher front out put to be input of old end or not.
     train_inter = StreamDataset(train_set.data_x, np.array(data_inter), train_set.task_id, None)
@@ -195,6 +205,7 @@ def student_train_teacher(teacher_model, train_set, device, config):
     data_x = []
     data_inter = []
     data_y = []
+    # data_x = torch.empty([0, train_set.data_x.shape[1]])
 
     for x in train_set.data_x:
         data_x.append(x)

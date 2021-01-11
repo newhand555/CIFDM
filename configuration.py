@@ -5,6 +5,7 @@ class Config:
 
         self.data_name = 'nuswide'#'yeast'
         self.attri_num = 128 # 128
+        self.embed_dim = 64
         self.label_list = [30, 26, 25] #[6, 5, 3]#  [14] [7, 6] [4, 4, 3, 2]
         self.train_instance_list = [60000, 50000, 50000] # [500, 500, 500] # [1500] [800, 700] [400, 400, 400, 300]
         # self.test_instance_list = [450, 450] # [900] [250, 250, 250, 150] [300, 300, 300]
@@ -22,6 +23,7 @@ class Config:
         self.new_batch = 64
         self.st_batch = 64
         self.ts_batch = 64
+        self.eval_batch = 256
 
         self.num_workers = 24
         self.weight = 5
