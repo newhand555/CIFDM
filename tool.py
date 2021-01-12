@@ -165,15 +165,15 @@ def produce_pseudo_data(data, model, device, method='mask'):
         preds = []
         reals = []
         counter = 0
-        for i in range(mask.shape[0]):
-            for j in range(mask.shape[1]):
-                if mask[i][j] == 1:
-                    preds.append(data_y[i][j].round())
-                    temp = data.all_y[i]
-                    reals.append(temp[j])
-                    if temp[j] == 1:
-                        counter+=1
-        print('mask', mask.shape, mask.shape[1]*mask.shape[0], np.sum(mask), counter/np.sum(mask), '%', "Acc", accuracy_score(np.array(reals), np.array(preds)), "Prec", precision_score(np.array(reals), np.array(preds)), "Recall", recall_score(np.array(reals), np.array(preds)))
+        # for i in range(mask.shape[0]):
+        #     for j in range(mask.shape[1]):
+        #         if mask[i][j] == 1:
+        #             preds.append(data_y[i][j].round())
+        #             temp = data.all_y[i]
+        #             reals.append(temp[j])
+        #             if temp[j] == 1:
+        #                 counter+=1
+        # print('mask', mask.shape, mask.shape[1]*mask.shape[0], np.sum(mask), counter/np.sum(mask), '%', "Acc", accuracy_score(np.array(reals), np.array(preds)), "Prec", precision_score(np.array(reals), np.array(preds)), "Recall", recall_score(np.array(reals), np.array(preds)))
 
     else:
         selected = data_select(data.data_x, data_y, -1)  # use inter or final to find suitable samples

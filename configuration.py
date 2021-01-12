@@ -11,12 +11,12 @@ class Config:
         # self.test_instance_list = [450, 450] # [900] [250, 250, 250, 150] [300, 300, 300]
         self.task_num = len(self.label_list)
 
-        self.first_epoch = 1
-        self.joint_epoch = 1
+        self.first_epoch = 3
+        self.joint_epoch = 3
         self.ssl_epoch = 1
         self.new_epoch = 1
-        self.st_epoch = 1
-        self.ts_epoch = 1
+        self.st_epoch = 3
+        self.ts_epoch = 3
 
         self.first_batch = 64
         self.ssl_batch = 64
