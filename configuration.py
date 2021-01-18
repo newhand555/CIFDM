@@ -3,20 +3,20 @@ class Config:
         self.data = args.data
         self.log = args.log
 
-        self.data_name = 'nuswide'#'yeast'
-        self.attri_num = 128 # 128
+        self.data_name = 'yelp'#'yeast'#'nuswide'
+        self.attri_num = 668 # 128
         self.embed_dim = 64
-        self.label_list = [30, 26, 25] #[6, 5, 3]#  [14] [7, 6] [4, 4, 3, 2]
-        self.train_instance_list = [60000, 50000, 50000] # [500, 500, 500] # [1500] [800, 700] [400, 400, 400, 300]
+        self.label_list = [2, 2, 2]#[30, 26, 25] #  [14] [7, 6] [4, 4, 3, 2][6, 5, 3]
+        self.train_instance_list = [2800, 2800, 2800] #  [60000, 50000, 50000]# [1500] [800, 700] [400, 400, 400, 300][500, 500, 500]
         # self.test_instance_list = [450, 450] # [900] [250, 250, 250, 150] [300, 300, 300]
         self.task_num = len(self.label_list)
 
-        self.first_epoch = 3
-        self.joint_epoch = 3
-        self.ssl_epoch = 1
-        self.new_epoch = 1
-        self.st_epoch = 3
-        self.ts_epoch = 3
+        self.first_epoch = 20
+        self.joint_epoch = 20
+        self.ssl_epoch = 5
+        self.new_epoch = 5
+        self.st_epoch = 60
+        self.ts_epoch = 60
 
         self.first_batch = 64
         self.ssl_batch = 64
