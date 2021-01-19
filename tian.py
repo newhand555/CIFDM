@@ -41,10 +41,15 @@ import torch
 # print(d.shape)
 
 a = [[1, 2, 3], [4, 5, 6]]
-b = [1, 2, 3]
+b = [1, 2, 3, 4, 5, 6]
+c = [2, 2, 2, 2, 2 ,2]
 w = torch.randn(3)
 a = np.array(a)
 a = torch.Tensor(a)
 b = torch.Tensor(b)
+c = torch.Tensor(c)
 print(w, b)
 print(w*a)
+print(torch.pow(b, 2))
+
+print(b[:3], b[3:])
