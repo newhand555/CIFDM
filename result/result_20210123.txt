@@ -1,0 +1,138 @@
+data_name: mirflickr.
+embed_dim: 128.
+task_num: 4.
+weight: 30.
+use_teacher: False.
+gamma: 8.
+first_epoch: {}.
+pse_epoch: {}.
+ssl_epoch {}.
+new_epoch: {}.
+sti_epoch: {}.
+ste_epoch: {}.
+ts_epoch: {}.
+as_epoch: {}
+first_batch: {}.
+ssl_batch: {}.
+new_batch: {}.
+st_batch: {}.
+ts_batch: {}.
+as_batch: {}
+
+(10417, 1038) (2083, 1038)
+(2083, 38)
+======================== Task 0 ========================
+Train single mode Epoch: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:24<00:00,  1.22s/it]
+The task 0 result is following:
+The task 0 result is following:
+The test shape is (2083, 11).
+Test Accuracy: 0.1872299567930869, 0.8660149260245276
+Test Precision: 0.38703339882121807
+Test Recall: 0.6088300220750552
+
+Train single mode Epoch: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:17<00:00,  1.18it/s]
+Teacher train student passed.
+
+======================== Task 1 ========================
+Train single mode Epoch: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:17<00:00,  1.11it/s]
+Joint train passed.
+The task 0 result is following:
+The test shape is (2083, 11).
+Test Accuracy: 0.1872299567930869, 0.8660149260245276
+Test Precision: 0.38703339882121807
+Test Recall: 0.6088300220750552
+
+The task 1 result is following:
+The test shape is (2083, 9).
+Test Accuracy: 0.11089774363898224, 0.7703632581212994
+Test Precision: 0.4028659532015237
+Test Recall: 0.6867656153370439
+
+Train single mode Epoch: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 5/5 [00:06<00:00,  1.37s/it]
+Train single mode Epoch: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:27<00:00,  1.37s/it]
+Student train teacher passed.
+Train single mode Epoch: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:17<00:00,  1.13it/s]
+Teacher train student passed.
+
+======================== Task 2 ========================
+Train single mode Epoch: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:18<00:00,  1.08it/s]
+Joint train passed.
+The task 0 result is following:
+The test shape is (2083, 11).
+Test Accuracy: 0.003840614498319731, 0.6894775891415353
+Test Precision: 0.22183987153016746
+Test Recall: 0.8538631346578367
+
+The task 1 result is following:
+The test shape is (2083, 9).
+Test Accuracy: 0.02784445511281805, 0.6527977809782899
+Test Precision: 0.3151179857739641
+Test Recall: 0.8630179344465059
+
+The task 2 result is following:
+The test shape is (2083, 9).
+Test Accuracy: 0.23523763802208353, 0.8622179548727796
+Test Precision: 0.38617052446527983
+Test Recall: 0.7297895902547066
+
+Train single mode Epoch: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 5/5 [00:07<00:00,  1.40s/it]
+Train single mode Epoch: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:27<00:00,  1.38s/it]
+Student train teacher passed.
+Train single mode Epoch: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:16<00:00,  1.20it/s]
+Teacher train student passed.
+
+======================== Task 3 ========================
+Train single mode Epoch: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:18<00:00,  1.10it/s]
+Joint train passed.
+The task 0 result is following:
+The test shape is (2083, 11).
+Test Accuracy: 0.0043206913106096975, 0.7036180334308034
+Test Precision: 0.2283965434469515
+Test Recall: 0.8401766004415011
+
+The task 1 result is following:
+The test shape is (2083, 9).
+Test Accuracy: 0.0, 0.45201898970501947
+Test Precision: 0.22625806953410593
+Test Recall: 0.8995052566481138
+
+The task 2 result is following:
+The test shape is (2083, 9).
+Test Accuracy: 0.40230436869899183, 0.8958766736011096
+Test Precision: 0.4724320241691843
+Test Recall: 0.6926910299003323
+
+The task 3 result is following:
+The test shape is (2083, 9).
+Test Accuracy: 0.08785405664906384, 0.7650290713180775
+Test Precision: 0.3354071363220494
+Test Recall: 0.7033768227168073
+
+
+======================== Final Result ========================
+Until the task 0 result is following:
+The test shape is (2083, 11).
+Test Accuracy: 0.0043206913106096975, 0.7036180334308034
+Test Precision: 0.2283965434469515
+Test Recall: 0.8401766004415011
+
+Until the task 1 result is following:
+The test shape is (2083, 20).
+Test Accuracy: 0.0, 0.5903984637542007
+Test Precision: 0.22709896644485347
+Test Recall: 0.8750681942171303
+
+Until the task 2 result is following:
+The test shape is (2083, 29).
+Test Accuracy: 0.0, 0.6852020461204827
+Test Precision: 0.2543524772412636
+Test Recall: 0.8299794661190965
+
+Until the task 3 result is following:
+The test shape is (2083, 38).
+Test Accuracy: 0.0, 0.7041084468251763
+Test Precision: 0.2694696607740086
+Test Recall: 0.7966905458581375
+
+278.7201597690582 s.
+yigong@lambda-quad-4:~/PycharmProjects/CIFDM$

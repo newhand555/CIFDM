@@ -3,6 +3,7 @@ import numpy as np
 import torch
 from torch.utils.data.dataset import Dataset
 from sklearn.linear_model import LogisticRegression
+import scipy.io
 
 
 class StreamDataset(Dataset):
@@ -239,6 +240,11 @@ def load_dataset(shuffle, config):
         train_data = np.array(train_data['data']).astype(np.float32)
         test_data = arff.load(open(test_path, 'rt'))
         test_data = np.array(test_data['data']).astype(np.float32)
+    elif config.data_name == 'mirflickr':
+        data_path = 'data/mirflickr.mat'
+        data = scipy.io.loadmat(data_path)
+        train_data = np.concatenate([np.array(data['X1']).astype(np.float32), np.array(data['X2']).astype(np.float32)], 1)
+        test_data = np.concatenate([np.array(data['XV1']).astype(np.float32), np.array(data['XV2']).astype(np.float32)], 1)
     else:
         print("The dataset {} is not supported.".format(config.data_name))
         return None
@@ -272,20 +278,11 @@ def load_dataset(shuffle, config):
     if total > train_data.shape[0]:
         print('Error test intance number.')
         return
+
     print(train_data.shape, test_data.shape)
+
     if shuffle:
-        shuffled_indices = np.random.permutation(train_data.shape[0])
-        train_data = train_data[shuffled_indices, :]
-        temp_x = train_data[:, : config.attri_num]
-        temp_y = train_data[:, config.attri_num:]
-        # np.random.seed(95)
-        shuffled_indices = np.random.permutation(temp_y.shape[1])
-        temp_y = temp_y[:, shuffled_indices]
-        train_data = np.concatenate([temp_x, temp_y], 1)
-        temp_x = test_data[:, : config.attri_num]
-        temp_y = test_data[:, config.attri_num:]
-        temp_y = temp_y[:, shuffled_indices]
-        test_data = np.concatenate([temp_x, temp_y], 1)
+        train_data, test_data = make_shuffle(train_data, test_data, config)
 
     train_list = make_train_dataset_list(train_data, config.attri_num, config.label_list, config.train_instance_list,
                                          False)
@@ -295,8 +292,22 @@ def load_dataset(shuffle, config):
 
     return train_list, test_train_list, test_list
 
+def make_shuffle(train_data, test_data, config):
+    shuffled_indices = np.random.permutation(train_data.shape[0])
+    train_data = train_data[shuffled_indices, :]
+    temp_x = train_data[:, : config.attri_num]
+    temp_y = train_data[:, config.attri_num:]
+    np.random.seed(95)
+    shuffled_indices = np.random.permutation(temp_y.shape[1])
+    temp_y = temp_y[:, shuffled_indices]
+    train_data = np.concatenate([temp_x, temp_y], 1)
+    temp_x = test_data[:, : config.attri_num]
+    temp_y = test_data[:, config.attri_num:]
+    temp_y = temp_y[:, shuffled_indices]
+    test_data = np.concatenate([temp_x, temp_y], 1)
+    return train_data, test_data
 
-def data_select_mask(data_y, ci0=0.1, ci1=0.2):
+def data_select_mask(data_y, ci0=0.01, ci1=0.1):
     np.set_printoptions(threshold=np.inf)
     round0 = np.logical_and(-ci0 < data_y, data_y < ci0)
     round1 = np.logical_and((1 - ci1) < data_y, data_y < (1 + ci1))

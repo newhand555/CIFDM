@@ -7,6 +7,32 @@ class OldFrontModel(nn.Module):
         super(OldFrontModel, self).__init__()
         self.in_dim = in_dim
         self.out_dim = out_dim
+        # self.layers = nn.Sequential(
+        #     nn.Linear(self.in_dim, 256, True),
+        #     nn.Dropout(0.2, inplace=False),
+        #     nn.ReLU(),
+        #     nn.BatchNorm1d(256),
+        #     nn.Linear(256, 512, True),
+        #     nn.Dropout(0.2, inplace=False),
+        #     nn.ReLU(),
+        #     nn.BatchNorm1d(512),
+        #     nn.Linear(512, 1024, True),
+        #     nn.Dropout(0.2, inplace=False),
+        #     nn.ReLU(),
+        #     nn.BatchNorm1d(1024),
+        #     nn.Linear(1024, 512, True),
+        #     nn.Dropout(0.2, inplace=False),
+        #     nn.ReLU(),
+        #     nn.BatchNorm1d(512),
+        #     nn.Linear(512, 256, True),
+        #     nn.Dropout(0.2, inplace=False),
+        #     nn.ReLU(),
+        #     nn.BatchNorm1d(256),
+        #     nn.Linear(256, self.out_dim, True),
+        #     nn.Dropout(0.2, inplace=False),
+        #     nn.ReLU(),
+        #     nn.BatchNorm1d(self.out_dim),
+        # )
         self.layers = nn.Sequential(
             nn.Linear(self.in_dim, 128, True),
             nn.Dropout(0.2, inplace=False),
@@ -87,8 +113,34 @@ class NewFrontModel(nn.Module):
         super(NewFrontModel, self).__init__()
         self.in_dim = in_dim
         self.out_dim = out_dim
+        self.layers = nn.Sequential(
+            nn.Linear(self.in_dim, 512, True),
+            nn.Dropout(0.2, inplace=False),
+            nn.ReLU(),
+            nn.BatchNorm1d(512),
+            nn.Linear(512, 512, True),
+            nn.Dropout(0.2, inplace=False),
+            nn.ReLU(),
+            nn.BatchNorm1d(512),
+            nn.Linear(512, self.out_dim, True),
+            nn.Dropout(0.2, inplace=False),
+            nn.ReLU(),
+            nn.BatchNorm1d(self.out_dim),
+        )
         # self.layers = nn.Sequential(
-        #     nn.Linear(self.in_dim, 256, True),
+        #     nn.Linear(self.in_dim, 128, True),
+        #     nn.Dropout(0.2, inplace=False),
+        #     nn.ReLU(),
+        #     nn.BatchNorm1d(128),
+        #     nn.Linear(128, 256, True),
+        #     nn.Dropout(0.2, inplace=False),
+        #     nn.ReLU(),
+        #     nn.BatchNorm1d(256),
+        #     nn.Linear(256, 512, True),
+        #     nn.Dropout(0.2, inplace=False),
+        #     nn.ReLU(),
+        #     nn.BatchNorm1d(512),
+        #     nn.Linear(512, 256, True),
         #     nn.Dropout(0.2, inplace=False),
         #     nn.ReLU(),
         #     nn.BatchNorm1d(256),
@@ -101,32 +153,6 @@ class NewFrontModel(nn.Module):
         #     nn.ReLU(),
         #     nn.BatchNorm1d(self.out_dim),
         # )
-        self.layers = nn.Sequential(
-            nn.Linear(self.in_dim, 128, True),
-            nn.Dropout(0.2, inplace=False),
-            nn.ReLU(),
-            nn.BatchNorm1d(128),
-            nn.Linear(128, 256, True),
-            nn.Dropout(0.2, inplace=False),
-            nn.ReLU(),
-            nn.BatchNorm1d(256),
-            nn.Linear(256, 512, True),
-            nn.Dropout(0.2, inplace=False),
-            nn.ReLU(),
-            nn.BatchNorm1d(512),
-            nn.Linear(512, 256, True),
-            nn.Dropout(0.2, inplace=False),
-            nn.ReLU(),
-            nn.BatchNorm1d(256),
-            nn.Linear(256, 128, True),
-            nn.Dropout(0.2, inplace=False),
-            nn.ReLU(),
-            nn.BatchNorm1d(128),
-            nn.Linear(128, self.out_dim, True),
-            nn.Dropout(0.2, inplace=False),
-            nn.ReLU(),
-            nn.BatchNorm1d(self.out_dim),
-        )
 
     def forward(self, x):
         x = self.layers(x)

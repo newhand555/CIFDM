@@ -50,19 +50,20 @@ class IntervalLoss(torch.nn.Module):
         return loss
 
 class HybridLoss(torch.nn.Module):
-    def __init__(self, old_num, device):
+    def __init__(self, old_num, device, gamma=8, weight=1):
         super(HybridLoss, self).__init__()
         self.old_num = old_num
         self.mlsm = torch.nn.MultiLabelSoftMarginLoss()
-        self.correlation = CorrelationLoss(device)
-        self.asy = AsyCrossEntropyLoss(device)
+        self.correlation = CorrelationLoss(device, weight)
+        self.my_asy = AsyCrossEntropyLoss(device, gamma)
+        self.other_asy = AsymmetricLossOptimized()
 
     def forward(self, pred, label):
         pred_old = pred[:, : self.old_num]
         pred_new = pred[:, self.old_num:]
         label_old = label[:, : self.old_num]
         label_new = label[:, self.old_num:]
-        return self.mlsm(pred_old, label_old) + self.correlation(pred_new, label_new) + self.asy(pred_new, label_new)
+        return self.my_asy(pred_old, label_old) + self.correlation(pred_new, label_new) + self.other_asy(pred_new, label_new) + self.correlation(pred_old, label_old)
 
 
 class CorrelationMSELoss(torch.nn.Module):
@@ -75,10 +76,10 @@ class CorrelationMSELoss(torch.nn.Module):
         return self.mse(pred, label) + self.correlation(pred, label)
 
 class CorrelationAsymmetricLoss(torch.nn.Module):
-    def __init__(self, device):
+    def __init__(self, device, gamma_pos=6, weight=1):
         super(CorrelationAsymmetricLoss, self).__init__()
-        self.asy = AsymmetricLossOptimized()
-        self.correlation = CorrelationLoss(device)
+        self.asy = AsymmetricLossOptimized(gamma_pos)
+        self.correlation = CorrelationLoss(device, weight)
     def forward(self, pred, label):
         return self.asy(pred, label) + self.correlation(pred, label)
 
@@ -126,7 +127,7 @@ class FocalLoss(torch.nn.Module):
         pass
 
 class AsyCrossEntropyLoss(torch.nn.Module):
-    def __init__(self, device, gamma=6, alpha=64):
+    def __init__(self, device, gamma=6, alpha=1):
         super(AsyCrossEntropyLoss, self).__init__()
         self.device = device
         self.gamma = gamma
@@ -352,6 +353,9 @@ def make_test_one(concate_model, test_data, device, infor, config):
         print("The test shape is {}.".format(real_label.shape))
         # print("Test AUC: {}".format(roc_auc_score(real_label, pred_label, average='micro')))
         np.set_printoptions(threshold=np.inf)
+
+        # print(real_label[8:12])
+        # print(pred_label[8:12])
         real_label = np.array(real_label) > 0.5
         pred_label = np.array(pred_label) > 0.5
         print("Test Accuracy: {}, {}".format(accuracy_score(real_label, pred_label),
