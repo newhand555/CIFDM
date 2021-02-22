@@ -174,7 +174,7 @@ class NewEndModel(nn.Module):
             nn.BatchNorm1d(128),
         )
         self.out_layer = nn.Sequential(
-            nn.Linear(128, self.out_dim, bias=True),
+            nn.Linear(128 + self.out_dim, self.out_dim, bias=True),
             # MyActivation(),
             nn.Sigmoid()
         )
@@ -187,8 +187,9 @@ class NewEndModel(nn.Module):
             nn.Sigmoid()
         )
 
-    def forward(self, x):
-        x = self.layers(x)
+    def forward(self, x1, x2):
+        x1 = self.layers(x1)
+        x = torch.cat([x1, x2], 1)
         y = self.out_layer(x)
         return y
 
@@ -242,31 +243,6 @@ class AssistModel(nn.Module):
 
     def get_out_dim(self):
         return self.out_dim
-
-class AssistEndModel(nn.Module):
-    def __init__(self, in_dim, psudo_dim, out_dim):
-        super(AssistEndModel, self).__init__()
-        self.in_dim = in_dim
-        self.psudo_dim = psudo_dim
-        self.out_dim = out_dim
-        self.layers = nn.Sequential(
-            nn.Linear(self.in_dim+self.psudo_dim, self.out_dim, bias=True),
-            nn.Relu(),
-            nn.BatchNorm1d(self.in_dim+self.psudo_dim),
-        )
-
-    def modify_psudo_layer(self, psudo_dim):
-        self.psudo_dim = psudo_dim
-        self.layers = nn.Sequential(
-            nn.Linear(self.in_dim + self.psudo_dim, self.out_dim, bias=True),
-            nn.Relu(),
-            nn.BatchNorm1d(self.in_dim + self.psudo_dim),
-        )
-
-    def forward(self, x1, x2):
-        x = torch.cat([x1, x2], 1)
-        y = self.layers(x)
-        return y
 
 
 class TeacherFrontModel(nn.Module):
@@ -346,16 +322,6 @@ class ConcatTeacherModel(nn.Module):
 
     def get_out_dim(self):
         return self.end.get_out_dim()
-
-class ConcatAssistModel(nn.Module):
-    def __init__(self, front, end):
-        super(ConcatAssistModel, self).__init__()
-        self.front = front
-        self.end = end
-
-    def modify_io_dim(self, input, output):
-        self.front.modify_io_dim(input, output)
-        self.end.modify_psudo_layer(output)
 
 class MyActivation(nn.Module):
     def __init__(self):

@@ -20,9 +20,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a4b18051-d0b8-4948-b892-c1c9d62487fc" name="Default Changelist" comment="Update.">
+      <change afterPath="$PROJECT_DIR$/backup/dataset_backup_007.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backup/dataset_backup_008.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backup/dataset_backup_temp.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backup/main_backup_007.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backup/main_backup_008.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backup/main_backup_temp.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backup/model_backup_007.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backup/model_backup_008.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backup/model_backup_temp.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backup/tool_backup_007.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backup/tool_backup_008.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backup/tool_backup_temp.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backup/train_backup_007.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backup/train_backup_008.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backup/train_backup_temp.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shuoming.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/configuration.py" beforeDir="false" afterPath="$PROJECT_DIR$/configuration.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/model.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/train.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -60,6 +77,11 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/backup/backup_001" />
+    </key>
   </component>
   <component name="RunManager" selected="Python.main">
     <configuration name="configuration" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
@@ -210,6 +232,8 @@
       <workItem from="1610486157025" duration="14000" />
       <workItem from="1610654488629" duration="70367000" />
       <workItem from="1611076188076" duration="6144000" />
+      <workItem from="1611692222338" duration="32000" />
+      <workItem from="1614024481940" duration="9047000" />
     </task>
     <task id="LOCAL-00001" summary="Update.">
       <created>1601702222335</created>
@@ -316,7 +340,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611087816486</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Update.">
+      <created>1611692257027</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1611692257027</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

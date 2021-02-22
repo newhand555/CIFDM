@@ -42,7 +42,7 @@ def train_single(model, train_set, test_set, device, criterion, batch_size=1, ep
 
     model.eval()
 
-def train_joint(model_old, model_new, modelassist, train_set, test_set, device, config):
+def train_joint(model_old, model_new, model_assist, train_set, test_set, device, config):
     '''
     Train both old model and new model at same time.
 
@@ -57,9 +57,7 @@ def train_joint(model_old, model_new, modelassist, train_set, test_set, device, 
     '''
     # todo modify list append to find soft label
     # Modify the input and output dims of assistant model to match requirements of new task.
-    modelassist.modify_io_dim(model_old.end.get_out_dim(), train_set.data_y.shape[1])
-    assist_front = modelassist.front
-    assist_end = modelassist.end
+    model_assist.modify_io_dim(model_old.end.get_out_dim(), train_set.data_y.shape[1])
     # Modify the output dim of new model to match number of labels of new task.
     model_new.end.modify_out_layer(train_set.data_y.shape[1])
     model_old.to(device)
@@ -105,15 +103,15 @@ def train_joint(model_old, model_new, modelassist, train_set, test_set, device, 
     temp_criterion = CorrelationAsymmetricLoss(device, weight=config.weight).to(device)
     # temp_criterion = WeightCorrelationMSELoss(device, config.weight)
     # train assistant model once.
-    train_single(assist_front, dataset_assist, None, device, temp_criterion, config.as_batch, config.as_epoch, config.num_workers)  # must be 1
-    assist_front.eval()
-    data_y = torch.empty([0, assist_front.get_out_dim()]).to(device)
+    train_single(model_assist, dataset_assist, None, device, temp_criterion, config.as_batch, config.as_epoch, config.num_workers)  # must be 1
+    model_assist.eval()
+    data_y = torch.empty([0, model_assist.get_out_dim()]).to(device)
     temp_loader = DataLoader(dataset_assist, batch_size=256, shuffle=True, num_workers=24)
 
     # Get outputs of assistant model to be the inputs.
     for x, _ in temp_loader:
         x = x.to(device)
-        data_y = torch.cat([data_y, assist_front(x)], 0)
+        data_y = torch.cat([data_y, model_assist(x)], 0)
         # data_y.append(model_assist(x).cpu().detach().numpy())
 
     data_y = data_y.cpu().detach().numpy()
@@ -138,11 +136,76 @@ def train_joint(model_old, model_new, modelassist, train_set, test_set, device, 
     model_new.eval()
     print("Joint train passed.")
 
-def old_train_new_inter(old_model, new_model, train_set, device, config):
-    pass
 
-def new_train_old_inter():
-    pass
+def old_train_new(old_model, new_model, train_set, device, config):
+    old_front = old_model.front.to(device).eval()
+    new_front = new_model.front.to(device).eval()
+    data_inter = torch.empty([0, old_front.get_out_dim()]).to(device)
+    temp_loader = DataLoader(train_set, batch_size=config.eval_batch, shuffle=False, num_workers=24)
+    old_front.eval()
+
+    for x, _ in temp_loader:
+        x = x.to(device)
+        inter = old_front(x)
+        data_inter = torch.cat([data_inter, inter], 0)
+
+    data_inter = data_inter.cpu().detach().numpy()
+    train_inter = StreamDataset(train_set.data_x, np.array(data_inter), train_set.task_id, None)
+    temp_criterion = torch.nn.MSELoss()
+    train_single(new_front, train_inter, None, device, temp_criterion, config.ts_batch, config.ts_epoch, config.num_workers)
+    print("Teacher train student passed.")
+
+def new_train_old(old_model, new_model, train_set, device, config):
+    old_front = old_model.front.to(device).eval()
+    old_end = old_model.end.to(device).eval()
+    new_front = new_model.front.to(device).eval()
+    temp_loader = DataLoader(train_set, batch_size=config.eval_batch, shuffle=True, num_workers=24)
+    data_x = torch.empty([0, train_set.data_x.shape[1]]).to(device)
+    data_inter = torch.empty([0, config.embed_dim]).to(device)
+    data_y = torch.empty([0, old_model.get_out_dim()]).to(device)
+
+    for x, _ in temp_loader:
+        x = x.to(device)
+        data_x = torch.cat([data_x, x], 0)
+        data_x = torch.cat([data_x, x], 0)
+        temp = old_front(x)
+        data_inter = torch.cat([data_inter, temp], 0)
+        data_inter = torch.cat([data_inter, new_front(x)], 0)
+        data_y = torch.cat([data_y, old_end(temp)], 0)
+
+    data_x = data_x.cpu().detach().numpy()
+    data_inter = data_inter.cpu().detach().numpy()
+    data_y = data_y.cpu().detach().numpy()
+    train_inter = StreamDataset(np.array(data_x), np.array(data_inter), train_set.task_id, None)
+    data_y = np.concatenate((np.array(data_y), train_set.data_y), 1)
+    train_all = StreamDataset(train_set.data_x, data_y, train_set.task_id, None)
+    temp_criterion = torch.nn.MSELoss()
+    train_single(old_front, train_inter, None, device, temp_criterion, config.st_batch, config.sti_epoch, config.num_workers)
+    old_end.modify_out_layer(data_y.shape[1])
+    temp_criterion = HybridLoss(old_end.get_out_dim(), device, gamma=config.gamma, weight=config.weight).to(device)
+    # temp_criterion = CorrelationAsymmetricLoss(device, gamma_pos=8, weight=config.weight).to(device)
+    train_single(old_model, train_all, None, device, temp_criterion, config.st_batch, config.ste_epoch, config.num_workers)
+
+    print("Student train teacher passed.")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def teacher_train_student(teacher_model, old_model, new_model, train_set, device, config):
     '''
@@ -242,56 +305,5 @@ def student_train_teacher(teacher_model, train_set, device, config):
     temp_criterion = HybridLoss(old_end.get_out_dim(), device, gamma=config.gamma, weight=config.weight).to(device)
     # Train whole model to has ability has same performance of combination task from both old and new models.
     train_single(teacher_model, train_all, None, device, temp_criterion, config.st_batch, config.ste_epoch, config.num_workers)
-
-    print("Student train teacher passed.")
-
-def old_train_new(old_model, new_model, train_set, device, config):
-    old_front = old_model.front.to(device).eval()
-    new_front = new_model.front.to(device).eval()
-    data_inter = torch.empty([0, old_front.get_out_dim()]).to(device)
-    temp_loader = DataLoader(train_set, batch_size=config.eval_batch, shuffle=False, num_workers=24)
-    old_front.eval()
-
-    for x, _ in temp_loader:
-        x = x.to(device)
-        inter = old_front(x)
-        data_inter = torch.cat([data_inter, inter], 0)
-
-    data_inter = data_inter.cpu().detach().numpy()
-    train_inter = StreamDataset(train_set.data_x, np.array(data_inter), train_set.task_id, None)
-    temp_criterion = torch.nn.MSELoss()
-    train_single(new_front, train_inter, None, device, temp_criterion, config.ts_batch, config.ts_epoch, config.num_workers)
-    print("Teacher train student passed.")
-
-def new_train_old(old_model, new_model, train_set, device, config):
-    old_front = old_model.front.to(device).eval()
-    old_end = old_model.end.to(device).eval()
-    new_front = new_model.front.to(device).eval()
-    temp_loader = DataLoader(train_set, batch_size=config.eval_batch, shuffle=True, num_workers=24)
-    data_x = torch.empty([0, train_set.data_x.shape[1]]).to(device)
-    data_inter = torch.empty([0, config.embed_dim]).to(device)
-    data_y = torch.empty([0, old_model.get_out_dim()]).to(device)
-
-    for x, _ in temp_loader:
-        x = x.to(device)
-        data_x = torch.cat([data_x, x], 0)
-        data_x = torch.cat([data_x, x], 0)
-        temp = old_front(x)
-        data_inter = torch.cat([data_inter, temp], 0)
-        data_inter = torch.cat([data_inter, new_front(x)], 0)
-        data_y = torch.cat([data_y, old_end(temp)], 0)
-
-    data_x = data_x.cpu().detach().numpy()
-    data_inter = data_inter.cpu().detach().numpy()
-    data_y = data_y.cpu().detach().numpy()
-    train_inter = StreamDataset(np.array(data_x), np.array(data_inter), train_set.task_id, None)
-    data_y = np.concatenate((np.array(data_y), train_set.data_y), 1)
-    train_all = StreamDataset(train_set.data_x, data_y, train_set.task_id, None)
-    temp_criterion = torch.nn.MSELoss()
-    train_single(old_front, train_inter, None, device, temp_criterion, config.st_batch, config.sti_epoch, config.num_workers)
-    old_end.modify_out_layer(data_y.shape[1])
-    temp_criterion = HybridLoss(old_end.get_out_dim(), device, gamma=config.gamma, weight=config.weight).to(device)
-    # temp_criterion = CorrelationAsymmetricLoss(device, gamma_pos=8, weight=config.weight).to(device)
-    train_single(old_model, train_all, None, device, temp_criterion, config.st_batch, config.ste_epoch, config.num_workers)
 
     print("Student train teacher passed.")

@@ -7,7 +7,7 @@ import torch
 from configuration import Config
 from dataset import load_dataset
 from model import OldFrontModel, OldEndModel, NewFrontModel, NewEndModel, IntermediaModel, AssistModel, ConcatOldModel, \
-    ConcatNewModel, TeacherFrontModel, TeacherEndModel, ConcatTeacherModel, AssistEndModel, ConcatAssistModel
+    ConcatNewModel, TeacherFrontModel, TeacherEndModel, ConcatTeacherModel
 from other import AsymmetricLossOptimized
 from tool import CorrelationMLSMLoss, init_weights, make_test, CorrelationMSELoss, TaskInfor, WeightCorrelationMSELoss, \
     CorrelationAsymmetricLoss, make_test_one
@@ -28,8 +28,6 @@ def main(opt):
     new_end_model = NewEndModel(config.embed_dim, config.label_list[1]).to(device)
     intermedia_model = IntermediaModel(config.embed_dim * 2, config.embed_dim).to(device)
     assist_model = AssistModel(config.label_list[0], config.label_list[1]).to(device)
-    assist_end_model = AssistEndModel(config.embed_dim, config.label_list[1], config.embed_dim).to(device)
-    assist_concate_model = ConcatAssistModel(assist_model, assist_end_model).to(device)
     old_concate_model = ConcatOldModel(old_front_model, old_end_model).to(device)
     new_concate_model = ConcatNewModel(new_front_model, new_end_model).to(device)
 
@@ -53,7 +51,7 @@ def main(opt):
                 train_single(old_concate_model, train_list[i], test_train_list[i], device, temp_criterion, config.first_batch, config.first_epoch, 16)
                 print("The task {} result is following:".format(0))
                 infor = TaskInfor([0], 'single')
-                make_test(old_concate_model, new_concate_model, assist_concate_model, test_data, device, infor, config)
+                make_test(old_concate_model, new_concate_model, assist_model, test_data, device, infor, config)
 
             if config.use_teacher == True:
                 teacher_front_model = TeacherFrontModel(copy.deepcopy(old_front_model), copy.deepcopy(new_front_model),
@@ -67,7 +65,7 @@ def main(opt):
                 old_train_new(old_concate_model, new_concate_model, train_list[i], device, config)
         else:
             # Other tasks need to adjust old model and train new model.
-            train_joint(old_concate_model, new_concate_model, assist_concate_model, train_list[i], None, device, config)
+            train_joint(old_concate_model, new_concate_model, assist_model, train_list[i], None, device, config)
             task_list = []
 
             for j in range(i+1):
