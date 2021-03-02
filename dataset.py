@@ -297,7 +297,7 @@ def make_shuffle(train_data, test_data, config):
     train_data = train_data[shuffled_indices, :]
     temp_x = train_data[:, : config.attri_num]
     temp_y = train_data[:, config.attri_num:]
-    np.random.seed(95)
+    np.random.seed(94)
     shuffled_indices = np.random.permutation(temp_y.shape[1])
     temp_y = temp_y[:, shuffled_indices]
     train_data = np.concatenate([temp_x, temp_y], 1)

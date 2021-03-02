@@ -1,6 +1,6 @@
 from time import time
 
-from sklearn.metrics import accuracy_score, roc_auc_score, precision_score, recall_score
+from sklearn.metrics import accuracy_score, roc_auc_score, precision_score, recall_score, f1_score
 from torch.utils.data import DataLoader
 import numpy as np
 from dataset import StreamDataset, data_select, data_select_mask, ParallelDataset
@@ -257,26 +257,29 @@ def produce_pseudo_data(data, model, device, method='mask'):
             # print("The selected accuracy is", accuracy_score(selected_truth, selected_y), accuracy_score(selected_truth.reshape(-1), selected_y.reshape(-1))) # test selected performance
     return dataset
 
-def make_test(old_concate_model, new_concate_model, assist_model, test_data, device, infor, config):
+def make_test(old_concate_model, new_concate_model, test_data, device, infor, config):
     # todo check details and modify usage
     label_index = [0]
     for l in config.label_list:
         label_index.append(l+label_index[-1])
 
     test_loader = DataLoader(test_data, batch_size=config.eval_batch, shuffle=False, num_workers=4)
-    old_concate_model.to(device).eval()
-    new_concate_model.to(device).eval()
-    assist_model.to(device).eval()
-
     outputs = np.empty((0, old_concate_model.get_out_dim()+new_concate_model.get_out_dim()))
     groud_truth = np.empty((0, test_data.data_y.shape[1]))
+
+    old_front = old_concate_model.front.to(device).eval()
+    old_end = old_concate_model.end.to(device).eval()
+    new_front = new_concate_model.front.to(device).eval()
+    new_end = new_concate_model.end.to(device).eval()
+    inter = new_concate_model.inter.to(device).eval()
 
     for x, y in test_loader:
         x = x.to(device)
         y = y.to(device)
-        pred1 = old_concate_model(x)
-        x2 = assist_model(pred1)
-        pred2 = new_concate_model(x, x2)
+        x1 = new_front(x)
+        x2 = old_front(x)
+        pred1 = old_end(x1)
+        pred2 = new_end(inter(x1, x2))
         pred = torch.cat([pred1, pred2], 1)
         outputs = np.concatenate([outputs, pred.cpu().detach().numpy()], 0)
         groud_truth = np.concatenate([groud_truth, y.cpu().detach().numpy()], 0)
@@ -307,9 +310,14 @@ def make_test(old_concate_model, new_concate_model, assist_model, test_data, dev
         pred_label = np.array(pred_label) > 0.5
         print("Test Accuracy: {}, {}".format(accuracy_score(real_label, pred_label),
                                         accuracy_score(real_label.reshape(-1), pred_label.reshape(-1))))
-        # print("Test AUC: {}".format(roc_auc_score(real_label.reshape(-1), pred_label.reshape(-1))))
-        print("Test Precision: {}".format(precision_score(real_label.reshape(-1), pred_label.reshape(-1))))
-        print("Test Recall: {}".format(recall_score(real_label.reshape(-1), pred_label.reshape(-1))))
+
+        print("Test micro-precision: {}".format(precision_score(real_label, pred_label, average='micro')))
+        print("Test micro-recall: {}".format(recall_score(real_label, pred_label, average='micro')))
+        print("Test micro-F1: {}".format(f1_score(real_label, pred_label, average='micro')))
+
+        # print("Test macro-precision: {}".format(precision_score(real_label, pred_label, average='macro')))
+        # print("Test macro-recall: {}".format(recall_score(real_label, pred_label, average='macro')))
+        # print("Test macro-F1: {}".format(f1_score(real_label, pred_label, average='macro')))
         print()
 
 def make_test_one(concate_model, test_data, device, infor, config):

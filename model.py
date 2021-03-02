@@ -7,57 +7,10 @@ class OldFrontModel(nn.Module):
         super(OldFrontModel, self).__init__()
         self.in_dim = in_dim
         self.out_dim = out_dim
-        # self.layers = nn.Sequential(
-        #     nn.Linear(self.in_dim, 256, True),
-        #     nn.Dropout(0.2, inplace=False),
-        #     nn.ReLU(),
-        #     nn.BatchNorm1d(256),
-        #     nn.Linear(256, 512, True),
-        #     nn.Dropout(0.2, inplace=False),
-        #     nn.ReLU(),
-        #     nn.BatchNorm1d(512),
-        #     nn.Linear(512, 1024, True),
-        #     nn.Dropout(0.2, inplace=False),
-        #     nn.ReLU(),
-        #     nn.BatchNorm1d(1024),
-        #     nn.Linear(1024, 512, True),
-        #     nn.Dropout(0.2, inplace=False),
-        #     nn.ReLU(),
-        #     nn.BatchNorm1d(512),
-        #     nn.Linear(512, 256, True),
-        #     nn.Dropout(0.2, inplace=False),
-        #     nn.ReLU(),
-        #     nn.BatchNorm1d(256),
-        #     nn.Linear(256, self.out_dim, True),
-        #     nn.Dropout(0.2, inplace=False),
-        #     nn.ReLU(),
-        #     nn.BatchNorm1d(self.out_dim),
-        # )
         self.layers = nn.Sequential(
-            nn.Linear(self.in_dim, 128, True),
-            nn.Dropout(0.2, inplace=False),
-            nn.ReLU(),
-            nn.BatchNorm1d(128),
-            nn.Linear(128, 256, True),
-            nn.Dropout(0.2, inplace=False),
-            nn.ReLU(),
-            nn.BatchNorm1d(256),
-            nn.Linear(256, 512, True),
-            nn.Dropout(0.2, inplace=False),
-            nn.ReLU(),
-            nn.BatchNorm1d(512),
-            nn.Linear(512, 256, True),
-            nn.Dropout(0.2, inplace=False),
-            nn.ReLU(),
-            nn.BatchNorm1d(256),
-            nn.Linear(256, 128, True),
-            nn.Dropout(0.2, inplace=False),
-            nn.ReLU(),
-            nn.BatchNorm1d(128),
-            nn.Linear(128, self.out_dim, True),
-            nn.Dropout(0.2, inplace=False),
-            nn.ReLU(),
-            nn.BatchNorm1d(self.out_dim),
+            nn.Linear(in_dim, out_dim, True),
+            nn.Dropout(0.1, inplace=False),
+            nn.ReLU()
         )
 
     def forward(self, x):
@@ -74,17 +27,12 @@ class OldEndModel(nn.Module):
         self.in_dim = in_dim
         self.out_dim = out_dim
         self.layers = nn.Sequential(
-            nn.Linear(self.in_dim, 128, True),
-            nn.Dropout(0.2, inplace=False),
+            nn.Linear(in_dim, 20, bias=True),
+            nn.Dropout(0.1, inplace=False),
             nn.ReLU(),
-            nn.BatchNorm1d(128),
-            nn.Linear(128, 128, True),
-            nn.Dropout(0.2, inplace=False),
-            nn.ReLU(),
-            nn.BatchNorm1d(128),
         )
         self.out_layer = nn.Sequential(
-            nn.Linear(128, out_dim, bias=True),
+            nn.Linear(20, out_dim, bias=True),
             # MyActivation(),
             # nn.Sigmoid(),
             nn.Sigmoid()
@@ -94,7 +42,7 @@ class OldEndModel(nn.Module):
         out_dict = self.out_layer.state_dict()
         self.out_dim = output
         self.out_layer = nn.Sequential(
-            nn.Linear(128, output, bias=True),
+            nn.Linear(20, self.out_dim, bias=True),
             # MyActivation(),
             nn.Sigmoid()
         )
@@ -114,45 +62,10 @@ class NewFrontModel(nn.Module):
         self.in_dim = in_dim
         self.out_dim = out_dim
         self.layers = nn.Sequential(
-            nn.Linear(self.in_dim, 512, True),
-            nn.Dropout(0.2, inplace=False),
-            nn.ReLU(),
-            nn.BatchNorm1d(512),
-            nn.Linear(512, 512, True),
-            nn.Dropout(0.2, inplace=False),
-            nn.ReLU(),
-            nn.BatchNorm1d(512),
-            nn.Linear(512, self.out_dim, True),
-            nn.Dropout(0.2, inplace=False),
-            nn.ReLU(),
-            nn.BatchNorm1d(self.out_dim),
+            nn.Linear(in_dim, out_dim, True),
+            nn.Dropout(0.1, inplace=False),
+            nn.ReLU()
         )
-        # self.layers = nn.Sequential(
-        #     nn.Linear(self.in_dim, 128, True),
-        #     nn.Dropout(0.2, inplace=False),
-        #     nn.ReLU(),
-        #     nn.BatchNorm1d(128),
-        #     nn.Linear(128, 256, True),
-        #     nn.Dropout(0.2, inplace=False),
-        #     nn.ReLU(),
-        #     nn.BatchNorm1d(256),
-        #     nn.Linear(256, 512, True),
-        #     nn.Dropout(0.2, inplace=False),
-        #     nn.ReLU(),
-        #     nn.BatchNorm1d(512),
-        #     nn.Linear(512, 256, True),
-        #     nn.Dropout(0.2, inplace=False),
-        #     nn.ReLU(),
-        #     nn.BatchNorm1d(256),
-        #     nn.Linear(256, 128, True),
-        #     nn.Dropout(0.2, inplace=False),
-        #     nn.ReLU(),
-        #     nn.BatchNorm1d(128),
-        #     nn.Linear(128, self.out_dim, True),
-        #     nn.Dropout(0.2, inplace=False),
-        #     nn.ReLU(),
-        #     nn.BatchNorm1d(self.out_dim),
-        # )
 
     def forward(self, x):
         x = self.layers(x)
@@ -168,13 +81,12 @@ class NewEndModel(nn.Module):
         self.in_dim = in_dim
         self.out_dim = out_dim
         self.layers = nn.Sequential(
-            nn.Linear(self.in_dim, 128, bias=True),
-            nn.Dropout(0.2, inplace=False),
+            nn.Linear(in_dim, 20, bias=True),
+            nn.Dropout(0.1, inplace=False),
             nn.ReLU(),
-            nn.BatchNorm1d(128),
         )
         self.out_layer = nn.Sequential(
-            nn.Linear(128, self.out_dim, bias=True),
+            nn.Linear(20, self.out_dim, bias=True),
             # MyActivation(),
             nn.Sigmoid()
         )
@@ -182,7 +94,7 @@ class NewEndModel(nn.Module):
     def modify_out_layer(self, output):
         self.out_dim = output
         self.out_layer = nn.Sequential(
-            nn.Linear(128 + output, output, bias=True),
+            nn.Linear(20, output, bias=True),
             # MyActivation(),
             nn.Sigmoid()
         )
@@ -319,18 +231,31 @@ class ConcatOldModel(nn.Module):
         return self.end.get_out_dim()
 
 class ConcatNewModel(nn.Module):
-    def __init__(self, front, end):
+    def __init__(self, front, inter, end):
         super(ConcatNewModel, self).__init__()
         self.front = front
+        self.inter = inter
         self.end = end
 
     def forward(self, x1, x2):
         x1 = self.front(x1)
-        y = self.end(x1, x2)
+        x = self.inter(x1, x2)
+        y = self.end(x)
         return y
 
     def get_out_dim(self):
         return self.end.get_out_dim()
+
+class InterEndModel(nn.Module):
+    def __init__(self, inter, end):
+        super(InterEndModel, self).__init__()
+        self.inter = inter
+        self.end = end
+
+    def forward(self, x1, x2):
+        x = self.inter(x1, x2)
+        y = self.end(x)
+        return y
 
 
 class ConcatTeacherModel(nn.Module):
