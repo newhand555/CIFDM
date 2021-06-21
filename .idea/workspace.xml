@@ -20,17 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a4b18051-d0b8-4948-b892-c1c9d62487fc" name="Default Changelist" comment="Update.">
-      <change afterPath="$PROJECT_DIR$/backup/configuration_backup_007.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/result/result_20210222.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/result/result_20210223.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backup/model_backup_temp.py" beforeDir="false" afterPath="$PROJECT_DIR$/backup/model_backup_temp.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/configuration.py" beforeDir="false" afterPath="$PROJECT_DIR$/configuration.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/train.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -224,7 +215,9 @@
       <workItem from="1611076188076" duration="6144000" />
       <workItem from="1611692222338" duration="32000" />
       <workItem from="1614024481940" duration="39935000" />
-      <workItem from="1614573153094" duration="20990000" />
+      <workItem from="1614573153094" duration="26496000" />
+      <workItem from="1614890919148" duration="18000" />
+      <workItem from="1614906619990" duration="25000" />
     </task>
     <task id="LOCAL-00001" summary="Update.">
       <created>1601702222335</created>
@@ -345,7 +338,14 @@
       <option name="project" value="LOCAL" />
       <updated>1614034853109</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Update.">
+      <created>1614654582904</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1614654582904</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -369,7 +369,7 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/CIFDM$train.coverage" NAME="train Coverage Results" MODIFIED="1610230564150" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/CIFDM$main.coverage" NAME="main Coverage Results" MODIFIED="1614649738827" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CIFDM$main.coverage" NAME="main Coverage Results" MODIFIED="1614741460140" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CIFDM$configuration.coverage" NAME="configuration Coverage Results" MODIFIED="1610162415725" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CIFDM$model.coverage" NAME="model Coverage Results" MODIFIED="1609883210405" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CIFDM$other.coverage" NAME="other Coverage Results" MODIFIED="1610921229928" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

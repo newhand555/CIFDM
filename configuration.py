@@ -31,7 +31,7 @@ class Config:
         self.num_workers = 24
         self.weight = 30
         self.use_teacher = False
-        self.gamma = 4
+        self.gamma = 8
 
     def __str__(self):
         result = 'data_name: {}.\nembed_dim: {}.\ntask_num: {}.\nweight: {}.\nuse_teacher: {}.\ngamma: {}.\n'.format(self.data_name, self.embed_dim, self.task_num, self.weight, self.use_teacher, self.gamma)
